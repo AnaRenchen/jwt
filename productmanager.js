@@ -20,7 +20,7 @@ class ProductManager {
             return`The code ${code} already exists.`;
         }  
 
-        const id = ProductManager.idCounter++
+        const id = ProductManager.idCounter++;
 
         const newProduct ={
         id,
