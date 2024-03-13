@@ -34,7 +34,7 @@ class ProductManager {
 
         this.#products.push(newProduct);
 
-        return `Product added.`;
+        return `Product "${newProduct.title}" was added.`;
     }
 
     getProducts(){
