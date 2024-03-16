@@ -26,14 +26,7 @@ console.log (await products.addProduct( "producto prueba4","este es un producto 
 
 console.log (await products.getProducts());
 
-const updateObject ={
-          "id": 2,
-          "title": "producto prueba3 actualizado",
-          "description": "este es un producto prueba3 actualizado",
-          "price": 150,
-}
-
-console.log (await products.updateProduct(2, updateObject));
+console.log (await products.updateProduct(2, {id:50}));
 
 console.log (await products.deleteProduct(3));
 

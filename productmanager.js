@@ -13,7 +13,7 @@ class ProductManager {
     async readProducts(){
         try{
         if(fs.existsSync(this.path)){
-            const products = JSON.parse(await fs.promises.readFile(this.path, {encoding: "utf-8"}));
+            let products = JSON.parse(await fs.promises.readFile(this.path, {encoding: "utf-8"}));
             return products;
         }else{
             return []
@@ -31,17 +31,17 @@ class ProductManager {
         try{
             if  (!title || !description || !price || !thumbnail || !code || !stock){
             console.log("All fields are required.");
-            return;
+            return [];
         }
     
 
-        const codigorepetido = products.some(item => item.code == code);
+        let codigorepetido = products.some(item => item.code == code);
         
         if (codigorepetido){
             return`The code ${code} already exists.`;
         }  
 
-        const id = ProductManager.idCounter++;
+        let id = ProductManager.idCounter++;
 
         const newProduct ={
         id,
@@ -78,9 +78,9 @@ class ProductManager {
         try{
         let products = await this.readProducts();
        
-        const product = products.find(item => item.id == id);
+        let product = products.find(item => item.id == id);
         if (product){
-            console.log ("The following roduct found:")
+            console.log ("The following product found:")
           return product;
         }else{
           return `Product with id ${id} was not found!`;
@@ -92,16 +92,23 @@ class ProductManager {
         }
     }
 
-    async updateProduct(id, objectUpdated){
+    async updateProduct(id, updateProperties={}){
         try{
              let products = await this.readProducts();
-             const productIndex= products.findIndex(item=>item.id===id);
+             let validProperties = ["title", "description", "price", "thumbnail", "code", "stock"]
+             let productIndex= products.findIndex(item=>item.id===id);
 
              if(productIndex !== -1){
-                const {id, ...rest}= objectUpdated;
-                products[productIndex]= {...products[productIndex], ...rest};
+                let properties = Object.keys(updateProperties);
+                let valid = properties.every(prop=>validProperties.includes(prop));
+                if(valid){
+                    products[productIndex]= {...products[productIndex], ...updateProperties};
+                    console.log (`Product with id ${id} was successfully updated.`)
+                }else{
+                    console.log ("The properties you are trying to update are not valid or do not exist.")
+                }
                 await fs.promises.writeFile(this.path, JSON.stringify(products, null, 5));
-            return `Product with id ${id} was successfully updated.`
+                return products[productIndex];
         }else{
             return `Product with ${id} was not found`;
         }
@@ -115,7 +122,7 @@ class ProductManager {
     async deleteProduct(id){
         try{
             let products = await this.readProducts();
-            const filteredProducts=  products.filter(item=>item.id!==id);
+            let filteredProducts=  products.filter(item=>item.id!==id);
             
             if (filteredProducts.length !== products.length){
             await fs.promises.writeFile(this.path, JSON.stringify(filteredProducts, null, 5));
