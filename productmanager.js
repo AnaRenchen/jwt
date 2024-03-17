@@ -83,7 +83,7 @@ class ProductManager {
                     products[productIndex] = { ...products[productIndex], ...updateProperties };
                     console.log(`Product with id ${id} was successfully updated:`)
                 } else {
-                    console.log("The properties you are trying to update are not valid or do not exist.")
+                    console.log(`The properties you are trying to update are not valid or do not exist. Valid properties are: ${validProperties}.`)
                 }
                 await fs.promises.writeFile(this.path, JSON.stringify(products, null, 5));
                 return products[productIndex];
