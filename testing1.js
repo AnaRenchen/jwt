@@ -1,7 +1,8 @@
 const ProductManager = require("./productmanager");
+
 const path = require("path");
 
-const entorno =async()=>{
+const environment =async()=>{
 
 const products = new ProductManager(path.join(__dirname, "file", "products.json"));
 
@@ -31,10 +32,10 @@ console.log (await products.updateProduct(2, {title:"soy un producto actualizado
 console.log (await products.deleteProduct(3));
 
     }catch(error){
-       console.log (error.message);
+       console.log ("Error", error.message);
        return;
     }
 }
 
-entorno();
+environment();
 

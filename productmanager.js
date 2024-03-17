@@ -2,13 +2,14 @@ const fs = require("fs");
 
 
 class ProductManager {
-    static idCounter = 1;
+    static idCounter;
 
     constructor(path) {
         this.path = path;
+        ProductManager.idCounter=1;
     }
 
-    async readProducts() {
+    async getProducts() {
         try {
             if (fs.existsSync(this.path)) {
                 let products = JSON.parse(await fs.promises.readFile(this.path, { encoding: "utf-8" }));
@@ -23,7 +24,7 @@ class ProductManager {
     }
 
     async addProduct(title, description, price, thumbnail, code, stock) {
-        let products = await this.readProducts();
+        let products = await this.getProducts();
         try {
             if (!title || !description || !price || !thumbnail || !code || !stock) {
                 console.log("All fields are required.");
@@ -52,22 +53,13 @@ class ProductManager {
         }
     }
 
-    async getProducts() {
-        try {
-            let displayProducts = await this.readProducts();
-            return displayProducts;
-        } catch (error) {
-            console.error("There was an error reading products file.", error.message);
-            return [];
-        }
-    }
 
     async getProductbyId(id) {
         try {
-            let products = await this.readProducts();
+            let products = await this.getProducts();
             let product = products.find(item => item.id == id);
             if (product) {
-                console.log("The following product found:")
+                console.log("The following product was found:")
                 return product;
             } else {
                 return `Product with id ${id} was not found!`;
@@ -80,7 +72,7 @@ class ProductManager {
 
     async updateProduct(id, updateProperties = {}) {
         try {
-            let products = await this.readProducts();
+            let products = await this.getProducts();
             let validProperties = ["title", "description", "price", "thumbnail", "code", "stock"]
             let productIndex = products.findIndex(item => item.id === id);
 
@@ -89,7 +81,7 @@ class ProductManager {
                 let valid = properties.every(prop => validProperties.includes(prop));
                 if (valid) {
                     products[productIndex] = { ...products[productIndex], ...updateProperties };
-                    console.log(`Product with id ${id} was successfully updated.`)
+                    console.log(`Product with id ${id} was successfully updated:`)
                 } else {
                     console.log("The properties you are trying to update are not valid or do not exist.")
                 }
@@ -106,7 +98,7 @@ class ProductManager {
 
     async deleteProduct(id) {
         try {
-            let products = await this.readProducts();
+            let products = await this.getProducts();
             let filteredProducts = products.filter(item => item.id !== id);
             if (filteredProducts.length !== products.length) {
                 await fs.promises.writeFile(this.path, JSON.stringify(filteredProducts, null, 5));
@@ -115,7 +107,7 @@ class ProductManager {
                 return `Product with id ${id} was not found.`
             }
         } catch (error) {
-            console.error("There was an error deleting the product.", error.message);
+            console.error("Error deleting the product.", error.message);
             return;
         }
     }
