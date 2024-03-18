@@ -2,11 +2,10 @@ const fs = require("fs");
 
 
 class ProductManager {
-    static idCounter;
+  
 
     constructor(path) {
         this.path = path;
-        ProductManager.idCounter=1;
     }
 
     async getProducts() {
@@ -34,7 +33,14 @@ class ProductManager {
             if (codigorepetido) {
                 return `The code ${code} already exists.`;
             }
-            let id = ProductManager.idCounter++;
+
+            let id;
+            if (products.length >0){
+                id = products[products.length -1].id +1;
+            }else{
+                id=1;
+            }
+
             const newProduct = {
                 id,
                 title,
@@ -44,7 +50,9 @@ class ProductManager {
                 code,
                 stock
             };
+
             products.push(newProduct);
+            
             await fs.promises.writeFile(this.path, JSON.stringify(products, null, 5));
             return `Product "${newProduct.title}" was added.`;
         } catch (error) {
