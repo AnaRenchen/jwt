@@ -1,29 +1,33 @@
-const fs = require("fs");
+import fs from "fs";
 
 
-class ProductManager {
+export default class ProductManager {
   
 
     constructor(path) {
         this.path = path;
-    }
+        this.products = [];
+        this.readProducts();
+        }
+    
+        async readProducts() {
+            try {
+                if (fs.existsSync(this.path)) {
+                    const data = await fs.promises.readFile(this.path, { encoding: "utf-8" });
+                    this.products = JSON.parse(data);
+                }
+            } catch (error) {
+                console.error("Error reading products file:", error.message);
+            }
+        }
 
     async getProducts() {
-        try {
-            if (fs.existsSync(this.path)) {
-                let products = JSON.parse(await fs.promises.readFile(this.path, { encoding: "utf-8" }));
-                return products;
-            } else {
-                return [];
-            }
-        } catch (error) {
-            console.error("Error reading products file:", error.message);
-            return;
-        }
-    }
+        return this.products;
+      }
+
 
     async addProduct(title, description, price, thumbnail, code, stock) {
-        let products = await this.getProducts();
+        let products = this.products;
         try {
             if (!title || !description || !price || !thumbnail || !code || !stock) {
                 console.log("All fields are required.");
@@ -34,15 +38,11 @@ class ProductManager {
                 return `The code ${code} already exists.`;
             }
 
-            let id;
-            if (products.length >0){
-                id = products[products.length -1].id +1;
-            }else{
-                id=1;
-            }
+            let maxId = Math.max(...this.products.map(product => product.id), 0);
+            let nextId = maxId +1;
 
             const newProduct = {
-                id,
+                id: nextId,
                 title,
                 description,
                 price,
@@ -67,10 +67,10 @@ class ProductManager {
             let products = await this.getProducts();
             let product = products.find(item => item.id == id);
             if (product) {
-                console.log("The following product was found:")
+                console.log("Product was found!")
                 return product;
             } else {
-                return `Product with id ${id} was not found!`;
+                console.error ("Product not found!");
             }
         } catch (error) {
             console.error("There was an error searching for product´s id.", error.message);
@@ -96,7 +96,7 @@ class ProductManager {
                 await fs.promises.writeFile(this.path, JSON.stringify(products, null, 5));
                 return products[productIndex];
             } else {
-                return `Product with ${id} was not found`;
+                return `Product was not found`;
             }
         } catch (error) {
             console.error("There was an error updating the product.", error.message);
@@ -110,9 +110,9 @@ class ProductManager {
             let filteredProducts = products.filter(item => item.id !== id);
             if (filteredProducts.length !== products.length) {
                 await fs.promises.writeFile(this.path, JSON.stringify(filteredProducts, null, 5));
-                return `Product with id ${id} was deleted.`
+                return `Product was deleted.`
             } else {
-                return `Product with id ${id} was not found.`
+                return `Product  was not found.`
             }
         } catch (error) {
             console.error("Error deleting the product.", error.message);
@@ -121,7 +121,8 @@ class ProductManager {
     }
 }
 
-module.exports = ProductManager;
+
+
 
 
     
