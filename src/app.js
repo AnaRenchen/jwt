@@ -18,7 +18,7 @@ app.get("/", (req,res)=>{
 
 app.get("/products", async (req,res)=>{
 
-    let products =   await productsManager.getProducts();
+    let products = await productsManager.getProducts();
     let limit = req.query.limit;
 
     if(!limit){
