@@ -1,92 +1,92 @@
 [
-     {
-          "id": 1,
-          "title": "kiku",
-          "description": "Original Painting A3 Size",
-          "price": 200,
-          "thumbnail": "sin imagen",
-          "code": "horisada1",
-          "stock": 2
-     },
-     {
-          "id": 2,
-          "title": "unryu",
-          "description": "Original Painting A3 Size",
-          "price": 280,
-          "thumbnail": "sin imagen",
-          "code": "horisada2",
-          "stock": 5
-     },
-     {
-          "id": 3,
-          "title": "nyo",
-          "description": "Original Painting A3 Size",
-          "price": 299,
-          "thumbnail": "sin imagen",
-          "code": "horisada3",
-          "stock": 2
-     },
-     {
-          "id": 4,
-          "title": "jiraya",
-          "description": "Original Painting A3 Size",
-          "price": 300,
-          "thumbnail": "sin imagen",
-          "code": "horisada4",
-          "stock": 3
-     },
-     {
-          "id": 5,
-          "title": "kasha",
-          "description": "Original Painting A3 Size",
-          "price": 190,
-          "thumbnail": "sin imagen",
-          "code": "horisada5",
-          "stock": 5
-     },
-     {
-          "id": 6,
-          "title": "karajishi",
-          "description": "Original Painting A3 Size",
-          "price": 230,
-          "thumbnail": "sin imagen",
-          "code": "horisada6",
-          "stock": 1
-     },
-     {
-          "id": 7,
-          "title": "kingyo",
-          "description": "Original Painting A3 Size",
-          "price": 290,
-          "thumbnail": "sin imagen",
-          "code": "horisada7",
-          "stock": 3
-     },
-     {
-          "id": 8,
-          "title": "kitsune",
-          "description": "Original Painting A3 Size",
-          "price": 250,
-          "thumbnail": "sin imagen",
-          "code": "horisada8",
-          "stock": 4
-     },
-     {
-          "id": 9,
-          "title": "koyihime",
-          "description": "Original Painting A3 Size",
-          "price": 380,
-          "thumbnail": "sin imagen",
-          "code": "horisada9",
-          "stock": 3
-     },
-     {
-          "id": 10,
-          "title": "botan",
-          "description": "Original Painting A3 Size",
-          "price": 250,
-          "thumbnail": "sin imagen",
-          "code": "horisada10",
-          "stock": 2
-     }
+  {
+    "id": 1,
+    "title": "kiku",
+    "description": "Original Painting A3 Size",
+    "price": 200,
+    "thumbnail": "sin imagen",
+    "code": "horisada1",
+    "stock": 3
+  },
+  {
+    "id": 2,
+    "title": "unryu",
+    "description": "Original Painting A3 Size",
+    "price": 280,
+    "thumbnail": "sin imagen",
+    "code": "horisada2",
+    "stock": 5
+  },
+  {
+    "id": 3,
+    "title": "nyo",
+    "description": "Original Painting A3 Size",
+    "price": 299,
+    "thumbnail": "sin imagen",
+    "code": "horisada3",
+    "stock": 2
+  },
+  {
+    "id": 4,
+    "title": "jiraya",
+    "description": "Original Painting A3 Size",
+    "price": 300,
+    "thumbnail": "sin imagen",
+    "code": "horisada4",
+    "stock": 3
+  },
+  {
+    "id": 5,
+    "title": "kasha",
+    "description": "Original Painting A3 Size",
+    "price": 190,
+    "thumbnail": "sin imagen",
+    "code": "horisada5",
+    "stock": 5
+  },
+  {
+    "id": 6,
+    "title": "karajishi",
+    "description": "Original Painting A3 Size",
+    "price": 230,
+    "thumbnail": "sin imagen",
+    "code": "horisada6",
+    "stock": 1
+  },
+  {
+    "id": 7,
+    "title": "kingyo",
+    "description": "Original Painting A3 Size",
+    "price": 290,
+    "thumbnail": "sin imagen",
+    "code": "horisada7",
+    "stock": 3
+  },
+  {
+    "id": 8,
+    "title": "kitsune",
+    "description": "Original Painting A3 Size",
+    "price": 250,
+    "thumbnail": "sin imagen",
+    "code": "horisada8",
+    "stock": 4
+  },
+  {
+    "id": 9,
+    "title": "koyihime",
+    "description": "Original Painting A3 Size",
+    "price": 380,
+    "thumbnail": "sin imagen",
+    "code": "horisada9",
+    "stock": 3
+  },
+  {
+    "id": 10,
+    "title": "botan",
+    "description": "Original Painting A3 Size",
+    "price": "270",
+    "thumbnail": "sin imagen",
+    "code": "horisada10",
+    "stock": 2
+  }
 ]

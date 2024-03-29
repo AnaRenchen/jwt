@@ -11,9 +11,20 @@ export default class ProductManager {
         this.getProducts();
         }
 
-        async initId (){
-            let maxId = Math.max(...this.products.map(product => product.id), 0);
-            this.id = maxId +1;
+        async initId() {
+            try {
+                if (fs.existsSync(this.path)) {
+                    const data = await fs.promises.readFile(this.path, { encoding: "utf-8" });
+                    const products = JSON.parse(data);
+                    const maxId = Math.max(...products.map(product => product.id), 0);
+                    this.id = maxId + 1;
+                } else {
+                    this.id = 1; 
+                }
+            } catch (error) {
+                console.error("Error initializing product ID:", error.message);
+                this.id = 1; 
+            }
         }
     
         async getProducts() {
@@ -22,7 +33,7 @@ export default class ProductManager {
                     const data = await fs.promises.readFile(this.path, { encoding: "utf-8" });
                     return this.products = JSON.parse(data);
                 }else{
-                    return [];
+                    this.carts=[];
                 }
             } catch (error) {
                 console.error("Error reading products file:", error.message);
@@ -30,40 +41,38 @@ export default class ProductManager {
                 return [];
             }
 
-
-    async addProduct(title, description, price, thumbnail, code, stock) {
-        let products = this.products;
-        try {
-            if (!title || !description || !price || !thumbnail || !code || !stock) {
-                console.log("All fields are required.");
-                return [];
+            async addProduct(title, description, price, thumbnail, code, stock) {
+                try {
+                let products = this.products;
+        
+                if (!this.id) {
+                    await this.initId();
+                }
+        
+        
+                    const nextId = this.id;
+                    this.id++;
+        
+                    const newProduct = {
+                        id: nextId,
+                        title,
+                        description,
+                        price,
+                        thumbnail,
+                        code,
+                        stock
+                    };
+        
+                    products.push(newProduct);
+                    
+                    await fs.promises.writeFile(this.path, JSON.stringify(products, null, 5));
+                    
+                    console.log(`Product "${newProduct.title}" was added.`);
+                } catch (error) {
+                    console.error("Error adding product.", error.message);
+                    return;
+                }
             }
-            let codigorepetido = products.some(item => item.code == code);
-            if (codigorepetido) {
-                return `The code ${code} already exists.`;
-            }
-
-            const nextId = this.id++;
-
-            const newProduct = {
-                id: nextId,
-                title,
-                description,
-                price,
-                thumbnail,
-                code,
-                stock
-            };
-
-            products.push(newProduct);
-            
-            await fs.promises.writeFile(this.path, JSON.stringify(products, null, 5));
-            return `Product "${newProduct.title}" was added.`;
-        } catch (error) {
-            console.error("Error adding product.", error.message);
-            return;
-        }
-    }
 
 
     async getProductbyId(id) {
@@ -85,18 +94,12 @@ export default class ProductManager {
     async updateProduct(id, updateProperties = {}) {
         try {
             let products = this.products;
-            let validProperties = ["title", "description", "price", "thumbnail", "code", "stock"]
             let productIndex = products.findIndex(item => item.id === id);
 
             if (productIndex !== -1) {
-                let properties = Object.keys(updateProperties);
-                let valid = properties.every(prop => validProperties.includes(prop));
-                if (valid) {
                     products[productIndex] = { ...products[productIndex], ...updateProperties };
                     console.log(`Product with id ${id} was successfully updated:`)
-                } else {
-                    console.log(`The properties you are trying to update are not valid or do not exist. Valid properties are: ${validProperties}.`)
-                }
+
                 await fs.promises.writeFile(this.path, JSON.stringify(products, null, 5));
                 return products[productIndex];
             } else {
@@ -114,9 +117,9 @@ export default class ProductManager {
             let filteredProducts = products.filter(item => item.id !== id);
             if (filteredProducts.length !== products.length) {
                 await fs.promises.writeFile(this.path, JSON.stringify(filteredProducts, null, 5));
-                return `Product was deleted.`
+                console.log (`Product was deleted.`);
             } else {
-                return `Product was not found.`
+                console.log(`Product was not found.`);
             }
         } catch (error) {
             console.error("Error deleting the product.", error.message);

@@ -1,4 +1,4 @@
-import ProductManager from "./src/classes/productmanager.js";
+import ProductManager from "./src/dao/productmanager.js";
 
 const environment =async()=>{
 
@@ -7,8 +7,6 @@ const products = new ProductManager("./src/file/products.json");
 try{
     
 console.log (await products.getProducts());
-
-console.log (await products.addProduct());
 
 console.log(await products.addProduct("kiku","Original Painting A3 Size", 200, "sin imagen", "horisada1", 3));
 
@@ -34,16 +32,10 @@ console.log (await products.getProducts());
 
 console.log(await products.getProductbyId(3));
 
-
-console.log (await products.updateProduct(1, { stock: 2}));
-
-
-    }catch(error){
-       console.log ("Error", error.message);
-       return;
-    }
-
-}
+} catch (error) {
+    console.error(error);
+  }
+};
 
 environment();
 
