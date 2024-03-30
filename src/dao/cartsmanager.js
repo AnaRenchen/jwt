@@ -6,7 +6,8 @@ export default class CartsManager {
         this.path=path;
         this.carts=[];
         this.initIdCart();
-        this.readCarts();
+        this.getCarts();
+        
     }
 
     async initIdCart() {
@@ -16,27 +17,27 @@ export default class CartsManager {
                 const carts = JSON.parse(data);
                 const maxId = Math.max(...carts.map(cart => cart.id), 0);
                 this.id = maxId + 1;
-            } else {
-                this.id = maxId > 0 ? maxId + 1 : 1; 
+        } else {
+            this.id = 1;
             }
         } catch (error) {
-            console.error("Error initializing cart ID:", error.message);
+            console.error("Error initializing cart Id:", error.message);
             this.id = 1; 
         }
     }
 
-    async readCarts() {
+    async getCarts() {
         try {
             if (fs.existsSync(this.path)) {
                 const data = await fs.promises.readFile(this.path, { encoding: "utf-8" });
                 return this.carts = JSON.parse(data);
             }else{
-                return [];
+                this.carts = [];
             }
         } catch (error) {
             console.error("Error reading products file:", error.message);
         }
-            return [];
+        this.carts = [];
         }
 
     async createCart() {

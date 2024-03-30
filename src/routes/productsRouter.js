@@ -77,7 +77,7 @@ router.post("/", async (req,res)=>{
        
         let newProduct = await productsManager.addProduct(title, description, price, thumbnail, code, stock);
         res.setHeader('Content-Type','application/json');
-        return res.status(200).json(newProduct);
+        return res.status(200).json({message:"Product added.", newProduct});
 
     }catch(error){
         console.log(error)
@@ -98,6 +98,11 @@ router.put("/:pid", async(req,res)=>{
 
     let {updateProperties}= req.body;
 
+    if (!updateProperties) {
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(400).json({ error: "Properties must be provided as: {updateProperties: {property:value}}." });
+    }
+
     let validProperties = ["title", "description", "price", "thumbnail", "code", "stock"];
     let properties = Object.keys(updateProperties);
     let valid = properties.every(prop => validProperties.includes(prop));
@@ -115,7 +120,7 @@ router.put("/:pid", async(req,res)=>{
 
     let updatedProduct = await productsManager.updateProduct(id, updateProperties);
         res.setHeader('Content-Type','application/json');
-        return res.status(200).json(updatedProduct);
+        return res.status(200).json({message: `Product with id ${id} was updated.`, updatedProduct});
 
 }catch(error){
     console.log(error)
@@ -143,7 +148,7 @@ router.delete ("/:pid", async(req,res)=>{
 
         let deletedProduct =await productsManager.deleteProduct(id);
         res.setHeader('Content-Type','application/json');
-        return res.status(200).json(deletedProduct);
+        return res.status(200).json({ message: `Product with id ${id} was deleted.`, deletedProduct});
     
 
     }catch(error){

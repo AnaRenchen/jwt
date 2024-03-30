@@ -55,11 +55,12 @@ try{
             return res.status(400).json({error:"Id must be a number."});
         }
 
-        const updatedCart = await cartsmanager.addProductCart(cid, pid);
+       
+        const updatedCart = await cartsmanager.addProductCart (cid, pid);
 
         if(updatedCart){
             res.setHeader('Content-Type','application/json');
-            return res.status(200).json(updatedCart);
+            return res.status(200).json({message:"Product added.",updatedCart});
         }else{
             res.setHeader('Content-Type','application/json');
             return res.status(400).json({error:`There was an error updating cart.`});

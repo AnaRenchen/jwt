@@ -1,6 +1,5 @@
 import fs from "fs";
 
-
 export default class ProductManager {
   
 
@@ -33,7 +32,7 @@ export default class ProductManager {
                     const data = await fs.promises.readFile(this.path, { encoding: "utf-8" });
                     return this.products = JSON.parse(data);
                 }else{
-                    this.carts=[];
+                    return [];
                 }
             } catch (error) {
                 console.error("Error reading products file:", error.message);
