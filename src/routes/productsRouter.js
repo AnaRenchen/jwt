@@ -61,11 +61,11 @@ try{
 router.post("/", async (req,res)=>{
     try{
      let products = await productsManager.getProducts();
-     let {title, description, price, thumbnail, code, stock}= req.body;
+     let {title, description, price, status, thumbnail, code, stock}= req.body;
 
-     if (!title || !description || !price || !thumbnail || !code || !stock) {
+     if (!title || !description || !price || !status || !thumbnail || !code || !stock) {
         res.setHeader('Content-Type','application/json');
-        return res.status(400).json({error:`All fields are required: title, description, price, thumbnail, code, stock.`})
+        return res.status(400).json({error:`All fields are required: title, description, price, status, thumbnail, code, stock.`})
     }
    
     let codigorepetido = products.some(item => item.code == code);
@@ -74,7 +74,7 @@ router.post("/", async (req,res)=>{
         return res.status(400).json({error:`Product with code ${code} already exists.`})
     }
        
-        let newProduct = await productsManager.addProduct(title, description, price, thumbnail, code, stock);
+        let newProduct = await productsManager.addProduct(title, description, price, status, thumbnail, code, stock);
         res.setHeader('Content-Type','application/json');
         return res.status(200).json({message:"Product added.", newProduct});
 
@@ -102,7 +102,7 @@ router.put("/:pid", async(req,res)=>{
         return res.status(400).json({ error: "Properties must be provided as: {updateProperties: {property:value}}." });
     }
 
-    let validProperties = ["title", "description", "price", "thumbnail", "code", "stock"];
+    let validProperties = ["title", "description", "price", "status", "thumbnail", "code", "stock"];
     let properties = Object.keys(updateProperties);
     let valid = properties.every(prop => validProperties.includes(prop));
 
