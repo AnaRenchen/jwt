@@ -44,11 +44,6 @@ export default class ProductManager {
                 try {
                 let products = this.products;
         
-                if (!this.id) {
-                    await this.initId();
-                }
-        
-        
                     const nextId = this.id;
                     this.id++;
         
@@ -76,8 +71,7 @@ export default class ProductManager {
 
     async getProductbyId(id) {
         try {
-            let products = this.products;
-            let product = products.find(item => item.id == id);
+            let product = this.products.find(item => item.id == id);
             if (product) {
                 console.log("Product was found!")
                 return product;
@@ -121,7 +115,7 @@ export default class ProductManager {
                 console.log(`Product was not found.`);
             }
         } catch (error) {
-            console.error("Error deleting the product.", error.message);
+            console.error("Error deleting product.", error.message);
             return;
         }
     }

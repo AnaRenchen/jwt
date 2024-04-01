@@ -4,7 +4,6 @@ export const router=Router();
 
 const productsManager = new ProductManager("./src/file/products.json");
 
-
 router.get("/", async (req,res)=>{
     try{
     let products = await productsManager.getProducts();
@@ -18,7 +17,7 @@ router.get("/", async (req,res)=>{
     limit=Number(limit);
     if(isNaN(limit)){
         res.setHeader('Content-Type','application/json');
-        return res.status(400).json({error:"Limit must be a number"});
+        return res.status(400).json({error:"Limit must be a number."});
     }
 
     if(limit && limit>=0){
@@ -66,7 +65,7 @@ router.post("/", async (req,res)=>{
 
      if (!title || !description || !price || !thumbnail || !code || !stock) {
         res.setHeader('Content-Type','application/json');
-        return res.status(400).json({error:`All fields are required.`})
+        return res.status(400).json({error:`All fields are required: title, description, price, thumbnail, code, stock.`})
     }
    
     let codigorepetido = products.some(item => item.code == code);
@@ -127,7 +126,6 @@ router.put("/:pid", async(req,res)=>{
     res.setHeader('Content-Type','application/json');
     return res.status(500).json({error:"Internal server error."})
 }
-
 })
 
 router.delete ("/:pid", async(req,res)=>{
@@ -149,12 +147,10 @@ router.delete ("/:pid", async(req,res)=>{
         let deletedProduct =await productsManager.deleteProduct(id);
         res.setHeader('Content-Type','application/json');
         return res.status(200).json({ message: `Product with id ${id} was deleted.`, deletedProduct});
-    
 
     }catch(error){
         console.log(error)
         res.setHeader('Content-Type','application/json');
         return res.status(500).json({error:"Internal server error."})
     }
-
 })

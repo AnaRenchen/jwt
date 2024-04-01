@@ -7,7 +7,6 @@ export default class CartsManager {
         this.carts=[];
         this.initIdCart();
         this.getCarts();
-        
     }
 
     async initIdCart() {
@@ -32,21 +31,20 @@ export default class CartsManager {
                 const data = await fs.promises.readFile(this.path, { encoding: "utf-8" });
                 return this.carts = JSON.parse(data);
             }else{
-                this.carts = [];
+                return [];
             }
         } catch (error) {
             console.error("Error reading products file:", error.message);
         }
-        this.carts = [];
+        return [];
         }
 
     async createCart() {
         try {
-            let carts=this.carts;
 
                 const nextId = this.id;
                 this.id++;
-
+                
                 const newCart={
                     id: nextId,
                     products: []
@@ -54,21 +52,19 @@ export default class CartsManager {
 
                 this.carts.push(newCart);
 
-                await fs.promises.writeFile(this.path, JSON.stringify(carts, null, 5));
+                await fs.promises.writeFile(this.path, JSON.stringify(this.carts, null, 5));
 
                 return newCart;
 
         } catch (error) {
             console.error("Error creating cart:", error.message);
             return null;
-        }
-            
+        }   
         }
 
         async getCartbyId(id){
             try {
-                let carts = this.carts;
-                let cart = carts.find(cart => cart.id == id);
+                let cart = this.carts.find(cart => cart.id == id);
                 if (cart) {
                     console.log("Cart was found!")
                     return cart.products;
@@ -79,7 +75,6 @@ export default class CartsManager {
                 console.error("There was an error getting cart.", error.message);
                 return;
             }
-
         }
 
         async addProductCart(cid, pid){
@@ -110,6 +105,5 @@ export default class CartsManager {
             console.error("Error adding product to cart.", error.message);
             return;
         }
-
         }
 }

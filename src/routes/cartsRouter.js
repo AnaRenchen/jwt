@@ -15,7 +15,6 @@ router2.post("/", async (req,res)=>{
         res.setHeader('Content-Type','application/json');
         return res.status(500).json({error:"Internal server error."})
     }
-
 })
 
 router2.get("/:cid", async (req, res)=>{
@@ -41,7 +40,7 @@ router2.get("/:cid", async (req, res)=>{
         res.setHeader('Content-Type','application/json');
         return res.status(500).json({error:"Internal server error."})
     }
-    })
+})
     
 
 router2.post("/:cid/product/:pid", async (req,res)=>{
@@ -55,7 +54,6 @@ try{
             return res.status(400).json({error:"Id must be a number."});
         }
 
-       
         const updatedCart = await cartsmanager.addProductCart (cid, pid);
 
         if(updatedCart){
