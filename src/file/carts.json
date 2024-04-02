@@ -10,6 +10,15 @@
   },
   {
     "id": 2,
+    "products": [
+      {
+        "pid": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  {
+    "id": 3,
     "products": []
   }
 ]

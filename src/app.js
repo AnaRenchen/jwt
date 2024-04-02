@@ -15,5 +15,4 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 
 
-
 app.listen(PORT, ()=>console.log(`Server online on ${PORT}`));
