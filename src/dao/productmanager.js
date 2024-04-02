@@ -40,7 +40,7 @@ export default class ProductManager {
                 return [];
             }
 
-            async addProduct(title, description, price, status, thumbnail, code, stock) {
+            async addProduct(title, description, category, price, status, thumbnail, code, stock) {
                 try {
                 let products = this.products;
         
@@ -51,6 +51,7 @@ export default class ProductManager {
                         id: nextId,
                         title,
                         description,
+                        category,
                         price,
                         status,
                         thumbnail,
