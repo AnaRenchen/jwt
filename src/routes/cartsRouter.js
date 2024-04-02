@@ -1,8 +1,10 @@
 import { Router } from "express";
 import CartsManager from "../dao/cartsmanager.js";
+import __dirname from "../utils.js";
+import path from "path";
 export const router2=Router();
 
-const cartsmanager = new CartsManager ("./src/file/carts.json");
+const cartsmanager = new CartsManager (path.join(__dirname, "file", "carts.json"));
 
 router2.post("/", async (req,res)=>{
     try{
