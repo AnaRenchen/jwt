@@ -8,6 +8,7 @@ export default class ProductManager {
         this.products = [];
         this.initId();
         this.getProducts();
+       
         }
 
         async initId() {

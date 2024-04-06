@@ -2,11 +2,12 @@ import { Router } from "express";
 import ProductManager from "../dao/productmanager.js";
 import __dirname from "../utils.js";
 import path from "path";
+import { auth } from "../middlewares/auth.js";
 export const router=Router();
 
 const productsManager = new ProductManager(path.join(__dirname, "file", "products.json"));
 
-router.get("/", async (req,res)=>{
+router.get("/", auth, async (req,res)=>{
     try{
     let products = await productsManager.getProducts();
     let limit = req.query.limit;

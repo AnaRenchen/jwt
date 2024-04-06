@@ -4,7 +4,15 @@
           "products": [
                {
                     "pid": 1,
-                    "quantity": 3
+                    "quantity": 5
+               },
+               {
+                    "pid": 3,
+                    "quantity": 1
+               },
+               {
+                    "pid": 10,
+                    "quantity": 2
                }
           ]
      },
@@ -12,13 +20,9 @@
           "id": 2,
           "products": [
                {
-                    "pid": 1,
-                    "quantity": 3
+                    "pid": 7,
+                    "quantity": 1
                }
           ]
-     },
-     {
-          "id": 3,
-          "products": []
      }
 ]

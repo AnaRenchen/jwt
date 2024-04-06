@@ -1,10 +1,13 @@
 import { Router } from "express";
 import CartsManager from "../dao/cartsmanager.js";
+import ProductManager from "../dao/productmanager.js";
 import __dirname from "../utils.js";
 import path from "path";
 export const router2=Router();
 
 const cartsmanager = new CartsManager (path.join(__dirname, "file", "carts.json"));
+
+const productmanager = new ProductManager (path.join(__dirname, "file", "products.json"));
 
 router2.post("/", async (req,res)=>{
     try{
@@ -54,6 +57,12 @@ try{
         if(isNaN(cid) || isNaN(pid) ){
             res.setHeader('Content-Type','application/json');
             return res.status(400).json({error:"Id must be a number."});
+        }
+
+        const product = await productmanager.getProductbyId(pid);
+        if (!product) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(404).json({ error: `Product with id ${pid} was not found.` });
         }
 
         const updatedCart = await cartsmanager.addProductCart (cid, pid);
