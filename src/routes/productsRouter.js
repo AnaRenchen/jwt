@@ -1,13 +1,15 @@
 import { Router } from "express";
 import ProductManager from "../dao/productmanager.js";
 import __dirname from "../utils.js";
+import serverSocket from "../app.js";
+
 import path from "path";
-import { auth } from "../middlewares/auth.js";
+
 export const router=Router();
 
 const productsManager = new ProductManager(path.join(__dirname, "file", "products.json"));
 
-router.get("/", auth, async (req,res)=>{
+router.get("/", async (req,res)=>{
     try{
     let products = await productsManager.getProducts();
     let limit = req.query.limit;
@@ -78,6 +80,10 @@ router.post("/", async (req,res)=>{
     }
        
         let newProduct = await productsManager.addProduct(title, description, category, price, status, thumbnail, code, stock);
+
+        serverSocket.emit ("newproduct", title);
+        console.log("added")
+
         res.setHeader('Content-Type','application/json');
         return res.status(200).json({message:"Product added.", newProduct});
 
@@ -148,6 +154,10 @@ router.delete ("/:pid", async(req,res)=>{
         }
 
         let deletedProduct =await productsManager.deleteProduct(id);
+
+        serverSocket.emit ("deletedproduct", product.title);
+        console.log("deleted");
+
         res.setHeader('Content-Type','application/json');
         return res.status(200).json({ message: `Product with id ${id} was deleted.`, deletedProduct});
 
