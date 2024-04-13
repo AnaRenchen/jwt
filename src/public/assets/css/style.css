@@ -16,7 +16,7 @@ body{
 
 header{
     height: 5em;
-    background-color: #331d1d;
+    background-color: #87a7ae;
 }
 
 a{
@@ -30,11 +30,12 @@ a{
     font-family: 'Times New Roman', Times, serif;
     text-align: center;
     text-decoration: none; 
-    font-weight: bold; 
+    font-weight:100;
+    letter-spacing: 0.8; 
 }
 
 a:hover {
-    color:#9f3434;
+    color:#c8b8ac;
   }
 
 .titulo{
@@ -45,6 +46,17 @@ a:hover {
     letter-spacing: 0.05em;
     font-weight: 100;
     margin: 2rem;
+}
+
+.greeting{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 2em;
+    color: #242220;
+    text-align: center;
+    letter-spacing: 0.05em;
+    font-weight: 100;
+    margin: 2rem;
+
 }
 
 .subtitulo{
@@ -80,7 +92,7 @@ th {
     border: 2px solid black;
     padding: 10px;
     text-align: center;
-    background-color: #e1b486;
+    background-color: #d4d0cc;
 }
 
 .list_container{
@@ -109,5 +121,5 @@ hr{
 
 footer{
     height: 5em;
-    background-color: #9f3434;
+    background-color: #454344;
 }

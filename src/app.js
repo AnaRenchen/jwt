@@ -32,4 +32,6 @@ const server=app.listen(PORT, ()=>console.log(`Server online on ${PORT}`));
 
 export const io = new Server(server);
 
-
+io.on("connection", socket=>{
+    console.log(`A cliente with id ${socket.id} is connected.`)
+})
