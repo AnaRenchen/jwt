@@ -1,62 +1,24 @@
 <header></header>
 
+<a href="/home">Products Data</a>
 <h1 class="titulo"> Horisada´s Paintings </h1>
 <hr />
 <hr />
 
 <h2 class="subtitulo"> Update Products </h2>
 
-
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Category</th>
-    <th>Price</th>
-    <th>Stock</th>
-  </tr>
-  <tr>
-    <td>
-      <div class="inline-block">
-       {{#each products}}
-           <p>{{title}}</p>
-      {{/each}}
-    </td>
-      <td>
-      <div class="inline-block">
-        {{#each products}}
-          <p>{{category}}</p>
-      {{/each}}
-    </td>
-    <td>
-      <div class="inline-block">
-        {{#each products}}
-          <p>{{price}}</p>
-      {{/each}}
-      </td>
-    <td>
-      <div class="inline-block">
-        {{#each products}}
-          <p>{{stock}}</p>
-      {{/each}}
-    </td>
-  </tr>
-</table>
-
-<form class="form" action="api/products/" method="get">
-  <input class="input_form" type="text" name="title" />
-  <input class="input_form" type="text" name="description" />
-  <input class="input_form" type="text" name="category" />
-  <input class="input_form" type="text" name="price" />
-  <input class="input_form" type="text" name="status" />
-  <input class="input_form" type="text" name="thumbnail" />
-  <input class="input_form" type="text" name="code" />
-  <input class="input_form" type="text" name="stock" />
-  <input class="boton" type="submit" vale="grabar" />
-
-</form>
+<div class="list_container">
+  <ul id="products">
+    {{#each products}}
+      <div class="product">
+        <li>Name: {{title}}</li>
+        <li>Code: {{code}}</li>
+      </div>
+    {{/each}}
+  </ul>
+</div>
 
 <footer></footer>
-
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/assets/js/script.js"></script>

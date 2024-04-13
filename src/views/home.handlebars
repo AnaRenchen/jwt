@@ -1,11 +1,11 @@
 <header></header>
 
+<a href="/realtimeproducts">Update Products</a>
 <h1 class="titulo"> Horisada´s Paintings </h1>
 <hr />
 <hr />
 
-<h2 class="subtitulo"> List of Products </h2>
-
+<h2 class="subtitulo"> Products Data </h2>
 
 <table>
   <tr>
@@ -13,47 +13,17 @@
     <th>Category</th>
     <th>Price</th>
     <th>Stock</th>
+    <th>Code</th>
   </tr>
-  <tr>
-    <td>
-      <div class="inline-block">
-       {{#each products}}
-           <p>{{title}}</p>
-      {{/each}}
-    </td>
-      <td>
-      <div class="inline-block">
-        {{#each products}}
-          <p>{{category}}</p>
-      {{/each}}
-    </td>
-    <td>
-      <div class="inline-block">
-        {{#each products}}
-          <p>{{price}}</p>
-      {{/each}}
-      </td>
-    <td>
-      <div class="inline-block">
-        {{#each products}}
-          <p>{{stock}}</p>
-      {{/each}}
-    </td>
-  </tr>
+  {{#each products}}
+    <tr>
+      <td>{{title}}</td>
+      <td>{{category}}</td>
+      <td>{{price}}</td>
+      <td>{{stock}}</td>
+      <td>{{code}}</td>
+    </tr>
+  {{/each}}
 </table>
 
-<form class="form" action="api/products/" method="get">
-  <input class="input_form" type="text" name="title" />
-  <input class="input_form" type="text" name="description" />
-  <input class="input_form" type="text" name="category" />
-  <input class="input_form" type="text" name="price" />
-  <input class="input_form" type="text" name="status" />
-  <input class="input_form" type="text" name="thumbnail" />
-  <input class="input_form" type="text" name="code" />
-  <input class="input_form" type="text" name="stock" />
-  <input class="boton" type="submit" vale="grabar" />
-
-</form>
-
 <footer></footer>
-

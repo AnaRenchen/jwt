@@ -28,11 +28,8 @@ app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 
 
-const serverTTTP=app.listen(PORT, ()=>console.log(`Server online on ${PORT}`));
+const server=app.listen(PORT, ()=>console.log(`Server online on ${PORT}`));
 
-export default serverSocket = new Server(serverTTTP);
+export const io = new Server(server);
 
 
-serverSocket.on("connection", socket=>{
-    socket.emit("greeting", "Welcome!")
-})

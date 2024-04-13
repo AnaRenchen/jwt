@@ -1,7 +1,7 @@
 import { Router } from "express";
 import ProductManager from "../dao/productmanager.js";
 import __dirname from "../utils.js";
-import serverSocket from "../app.js";
+import { io } from "../app.js";
 
 import path from "path";
 
@@ -81,7 +81,7 @@ router.post("/", async (req,res)=>{
        
         let newProduct = await productsManager.addProduct(title, description, category, price, status, thumbnail, code, stock);
 
-        serverSocket.emit ("newproduct", title);
+        io.emit ("newproduct", title, code);
         console.log("added")
 
         res.setHeader('Content-Type','application/json');
@@ -155,7 +155,9 @@ router.delete ("/:pid", async(req,res)=>{
 
         let deletedProduct =await productsManager.deleteProduct(id);
 
-        serverSocket.emit ("deletedproduct", product.title);
+        let products= await productsManager.getProducts();
+        console.log(products)
+        io.emit ("deletedproduct", products);
         console.log("deleted");
 
         res.setHeader('Content-Type','application/json');

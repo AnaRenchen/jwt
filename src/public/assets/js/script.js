@@ -1,15 +1,26 @@
 const socket = io();
 
-socket.on("greeting", text=>{
-   alert(text)
-})
+let ulProducts=document.getElementById("products")
 
-socket.on ("newproduct", title=>{
-    alert (`The product ${title} was added.`)
+socket.on("newproduct", (title, code) => {
+    ulProducts.innerHTML+=`
+    <div class="product">
+    <li>Name: ${title}</li>
+    <li>Code: ${code}</li>
+    </div>
+    `
 });
 
-socket.on("deletedproduct", (productName) => {
-    alert(`The product ${productName} was deleted.`);
+socket.on("deletedproduct", products => {
+    ulProducts.innerHTML=""
+    products.forEach(product=>{
+        ulProducts.innerHTML+=`
+        <div class="product">
+        <li>Name: ${product.title}</li>
+        <li>Code: ${product.code}</li>
+        </div>
+        `
+    })
 });
 
 
