@@ -2,7 +2,6 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-   
   }
 
 body{
@@ -97,25 +96,6 @@ th {
     padding: 10px;
     text-align: center;
     background-color: #d4d0cc;
-}
-
-.list_container{
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 1.5em;
-    letter-spacing: 0.8;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    align-items:center;
-    margin: 50px;
-}
-
-.list_container li{
-    list-style: none;
-}
-
-.product{
-    margin: 10px;
 }
 
 hr{
