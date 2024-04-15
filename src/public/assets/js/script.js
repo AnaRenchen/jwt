@@ -9,7 +9,7 @@ socket.on("newproduct", (productsList) => {
         <tr>
           <td>${p.title}</td>
           <td>${p.description}</td>
-          <td>${p.price}</td>
+          <td>$${p.price}</td>
           <td>${p.code}</td>
           <td>${p.stock}</td>
           <td>${p.status}</td>
@@ -26,7 +26,7 @@ socket.on("deletedproduct", (products) => {
         <tr>
           <td>${p.title}</td>
           <td>${p.description}</td>
-          <td>${p.price}</td>
+          <td>$${p.price}</td>
           <td>${p.code}</td>
           <td>${p.stock}</td>
           <td>${p.status}</td>
