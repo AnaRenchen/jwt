@@ -1,22 +1,45 @@
-<header></header>
+<header>
+  <div class="up_page"></div>
+  <a href="/home">Products Data</a>
+  <h1 class="titulo"> Horisada´s Paintings </h1>
+  <hr />
+  <hr />
+</header>
 
-<a href="/home">Products Data</a>
-<h1 class="titulo"> Horisada´s Paintings </h1>
-<hr />
-<hr />
+<main>
 
-<h2 class="subtitulo"> Update Products </h2>
+  <h2 class="subtitulo"> Update Products </h2>
 
-<div class="list_container">
-  <ul id="products">
-    {{#each products}}
-      <div class="product">
-        <li>Name: {{title}}</li>
-        <li>Code: {{code}}</li>
-      </div>
-    {{/each}}
-  </ul>
-</div>
+  <div class="table_container">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Code</th>
+          <th>Stock</th>
+          <th>Status</th>
+          <th>Category</th>
+        </tr>
+      </thead>
+      <tbody id="products">
+        {{#each products}}
+          <tr>
+            <td>{{title}}</td>
+            <td>{{description}}</td>
+            <td>{{price}}</td>
+            <td>{{code}}</td>
+            <td>{{stock}}</td>
+            <td>{{status}}</td>
+            <td>{{category}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+</main>
 
 <footer></footer>
 

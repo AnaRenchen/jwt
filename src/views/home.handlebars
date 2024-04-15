@@ -1,30 +1,44 @@
-<header></header>
+<header>
+  <div class="up_page"></div>
+  <a href="/realtimeproducts">Update Products</a>
+  <h1 class="titulo"> Horisada´s Paintings </h1>
+  <h4 class="greeting">いらっしゃいませ</h4>
+  <hr />
+  <hr />
+</header>
 
-<a href="/realtimeproducts">Update Products</a>
-<h1 class="titulo"> Horisada´s Paintings </h1>
-<h4 class="greeting">いらっしゃいませ</h4>
-<hr />
-<hr />
+<main>
 
-<h2 class="subtitulo"> Products Data </h2>
+  <h2 class="subtitulo"> Products Data </h2>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Category</th>
-    <th>Price</th>
-    <th>Stock</th>
-    <th>Code</th>
-  </tr>
-  {{#each products}}
-    <tr>
-      <td>{{title}}</td>
-      <td>{{category}}</td>
-      <td>{{price}}</td>
-      <td>{{stock}}</td>
-      <td>{{code}}</td>
-    </tr>
-  {{/each}}
-</table>
+  <div class="table_container">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Code</th>
+          <th>Stock</th>
+          <th>Status</th>
+          <th>Category</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each products}}
+          <tr>
+            <td>{{title}}</td>
+            <td>{{description}}</td>
+            <td>{{price}}</td>
+            <td>{{code}}</td>
+            <td>{{stock}}</td>
+            <td>{{status}}</td>
+            <td>{{category}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</main>
 
 <footer></footer>

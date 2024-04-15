@@ -81,7 +81,8 @@ router.post("/", async (req,res)=>{
        
         let newProduct = await productsManager.addProduct(title, description, category, price, status, thumbnail, code, stock);
 
-        io.emit ("newproduct", title, code);
+        let productsList= await productsManager.getProducts();
+        io.emit ("newproduct", productsList);
         console.log("added")
 
         res.setHeader('Content-Type','application/json');
@@ -156,7 +157,6 @@ router.delete ("/:pid", async(req,res)=>{
         let deletedProduct =await productsManager.deleteProduct(id);
 
         let products= await productsManager.getProducts();
-        console.log(products)
         io.emit ("deletedproduct", products);
         console.log("deleted");
 

@@ -8,16 +8,30 @@ const productsManager = new ProductManager(path.join(__dirname, "file", "product
 
 
 router3.get("/home", async (req,res) =>{
+    try{
     let products = await productsManager.getProducts();
 
     res.setHeader('Content-Type','text/html');
     res.status(200).render('home', {products, titulo: "Horisada"});
-})
+
+}catch(error){
+    console.log(error)
+    res.setHeader('Content-Type','application/json');
+    return res.status(500).json({error:"Internal server error."})
+}
+});
 
 router3.get("/realtimeproducts", async (req,res) =>{
-   
+    try{
+
     let products = await productsManager.getProducts();
 
     res.setHeader('Content-Type','text/html');
     res.status(200).render("realTimeProducts",{products} );
-})
+
+}catch(error){
+    console.log(error)
+    res.setHeader('Content-Type','application/json');
+    return res.status(500).json({error:"Internal server error."})
+}
+});
