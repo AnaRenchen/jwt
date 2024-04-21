@@ -35,3 +35,15 @@ router3.get("/realtimeproducts", async (req,res) =>{
     return res.status(500).json({error:"Internal server error."})
 }
 });
+
+router3.get("/chat", async (req,res) =>{
+    try{
+    res.setHeader('Content-Type','text/html');
+    res.status(200).render("chat");
+
+}catch(error){
+    console.log(error)
+    res.setHeader('Content-Type','application/json');
+    return res.status(500).json({error:"Internal server error."})
+}
+});

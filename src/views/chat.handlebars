@@ -1,0 +1,34 @@
+<header>
+  <div class="up_page">
+    <a href="/home"><img
+        class="logo"
+        src="https://i.postimg.cc/JzVpc1S5/logo-header.png"
+        alt="logo"
+        width="80"
+      /></a>
+  </div>
+  <nav class="navbar">
+    <a href="/home">Products Data</a>
+    <a href="/realtimeproducts">Update Products</a>
+    <a href="/chat">Chat</a>
+  </nav>
+  <h1 class="titulo"> Let´s chat </h1>
+</header>
+
+<main>
+
+  <input
+    type="text"
+    class="inputChat"
+    id="message"
+    placeholder=" type your message..."
+  />
+  <div id="messages" class="chatMessages"></div>
+
+</main>
+
+<footer></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/assets/js/chat.js"></script>

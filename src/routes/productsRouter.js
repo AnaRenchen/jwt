@@ -158,7 +158,7 @@ router.delete ("/:pid", async(req,res)=>{
 
         let products= await productsManager.getProducts();
         io.emit ("deletedproduct", products);
-        console.log("deleted");
+        console.log("Product deleted"); 
 
         res.setHeader('Content-Type','application/json');
         return res.status(200).json({ message: `Product with id ${id} was deleted.`, deletedProduct});

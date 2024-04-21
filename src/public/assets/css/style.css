@@ -14,14 +14,21 @@ body{
 }
 
 .up_page{
-    height: 5em;
+    height: 6em;
     background-color: #87a7ae;
 }
 
-a{
+.logo{
+    margin: 12px;
+}
+
+.navbar{
     display: flex;
     flex-wrap: wrap;
-    justify-content:end;
+   justify-content: flex-end;
+}
+
+.navbar a{  
     margin-top: 20px;
     margin-right: 50px;
     color:#242220;
@@ -101,6 +108,34 @@ th {
 hr{
     margin: 10px;
     color: #b4b3ad;
+}
+
+.inputChat {
+    margin: 50px;
+    width: 700px;
+    height: 50px;
+    padding: 15px;
+    background-color: #f0f0f0;
+    border: 2px solid #f9d0d9;
+    box-shadow: 0 0 5px rgba(249, 208, 217, 0.5);
+}
+
+.chatMessages{
+    width: 60%;
+    height: 350px;
+    overflow-y: scroll;
+    border: 1px solid #ccc;
+    padding: 15px;
+}
+
+.chat-message {
+    display: block; 
+    padding: 20px; 
+    background-color: #f0f0f0; 
+    border: 1px solid #f9d0d9; 
+    border-radius: 20px; 
+    margin-left: 30px;
+    width: 300px;
 }
 
 footer{

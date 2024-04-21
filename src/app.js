@@ -26,6 +26,8 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 
+let users=[];
+let messages=[];
 
 const server=app.listen(PORT, ()=>console.log(`Server online on ${PORT}`));
 
@@ -33,4 +35,24 @@ export const io = new Server(server);
 
 io.on("connection", socket=>{
     console.log(`A cliente with id ${socket.id} is connected.`)
+
+    socket.on("id", name=>{
+        users.push({id:socket.id, name});
+        socket.emit("previousMessages", messages)
+        socket.broadcast.emit("newUser", name)
+    })
+
+    socket.on("message", (name, message)=>{
+        messages.push({name, message});
+        io.emit("newMessage", name, message);
+    })
+
+    socket.on("disconnect",()=>{
+        let user=users.find(u=>
+            u.id === socket.id)
+            if(user){
+                io.emit("userLeft", user.name)
+            }
+
+    })
 })
