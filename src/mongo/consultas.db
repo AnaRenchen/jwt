@@ -1,0 +1,24 @@
+
+db.ecommerce.insertOne({
+          "title": "kiku",
+          "description": "Original Painting A3 Size",
+          "price": 200,
+          "thumbnail": "https://i.postimg.cc/4dDnYh84/crisantemos.jpg",
+          "code": "horisada1",
+          "stock": 3,
+          "status": true,
+          "category": "nature"
+     })
+
+     db.ecommerce.deleteOne({ "_id": ObjectId("662acbd0d5d75be42b117b7b") })
+
+     db.products.insertOne({
+    "title": "kiku",
+    "description": "Original Painting A3 Size",
+    "price": 200,
+    "thumbnail": "https://i.postimg.cc/4dDnYh84/crisantemos.jpg",
+    "code": "horisada1",
+    "stock": 3,
+    "status": true,
+    "category": "nature"
+})

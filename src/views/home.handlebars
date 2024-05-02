@@ -15,8 +15,9 @@
 
   <h1 class="titulo"> Horisada´s Paintings </h1>
   <h4 class="greeting">いらっしゃいませ</h4>
-  <hr />
-  <hr />
+
+  <div class="div_space"></div>
+
 </header>
 
 <main>
@@ -24,34 +25,20 @@
   <h2 class="subtitulo"> Products Data </h2>
 
   <div class="table_container">
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Price</th>
-          <th>Code</th>
-          <th>Stock</th>
-          <th>Status</th>
-          <th>Category</th>
-          <th>Image</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each products}}
-          <tr>
-            <td>{{title}}</td>
-            <td>{{description}}</td>
-            <td>${{price}}</td>
-            <td>{{code}}</td>
-            <td>{{stock}}</td>
-            <td>{{status}}</td>
-            <td>{{category}}</td>
-            <td><img src="{{thumbnail}}" alt="{{title}}" width="100" /></td>
-          </tr>
-        {{/each}}
-      </tbody>
-    </table>
+    {{#each products}}
+      <div class="container_cards">
+        <div class="card">
+          <img src="{{thumbnail}}" class="card-img-top" alt="{{title}}" />
+          <div class="card-body">
+            <p>{{title}}</p>
+            <p> {{description}} </p>
+            <p>Us${{price}}</p>
+            <button class="btn_cart">Add to cart </button>
+          </div>
+        </div>
+      </div>
+    {{/each}}
+
   </div>
 </main>
 

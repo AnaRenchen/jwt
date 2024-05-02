@@ -1,83 +1,87 @@
 import { Router } from "express";
-import CartsManager from "../dao/cartsmanager.js";
-import ProductManager from "../dao/productmanager.js";
-import __dirname from "../utils.js";
-import path from "path";
-export const router2=Router();
+import CartsManagerMongo from "../dao/cartsmanagerMongo.js";
+import ProductManagerMongo from "../dao/productmanagerMongo.js";
+import { isValidObjectId } from "mongoose";
+export const router2 = Router();
 
-const cartsmanager = new CartsManager (path.join(__dirname, "file", "carts.json"));
+const cartsMongo = new CartsManagerMongo();
 
-const productmanager = new ProductManager (path.join(__dirname, "file", "products.json"));
+const managerMongo = new ProductManagerMongo();
 
-router2.post("/", async (req,res)=>{
-    try{
-    let newCart = await cartsmanager.createCart();
-        res.setHeader('Content-Type','application/json');
-        return res.status(200).json(newCart);
+router2.post("/", async (req, res) => {
+  try {
+    let newCart = await cartsMongo.createCart();
+    res.setHeader("Content-Type", "application/json");
+    return res.status(200).json(newCart);
+  } catch (error) {
+    console.log(error);
+    res.setHeader("Content-Type", "application/json");
+    return res.status(500).json({ error: "Internal server error." });
+  }
+});
 
-    }catch(error){
-        console.log(error)
-        res.setHeader('Content-Type','application/json');
-        return res.status(500).json({error:"Internal server error."})
+router2.get("/:cid", async (req, res) => {
+  try {
+    let id = req.params.cid;
+    if (!isValidObjectId(id)) {
+      res.setHeader("Content-Type", "application/json");
+      return res.status(400).json({ error: "Please choose a valid Mongo id." });
     }
-})
 
-router2.get("/:cid", async (req, res)=>{
-    try{
-        let id = req.params.cid;
-        id=Number(id);
-        if(isNaN(id)){
-            res.setHeader('Content-Type','application/json');
-            return res.status(400).json({error:"Id must be a number."});
-        }
-    
-        let products= await cartsmanager.getCartbyId(id);
-    
-        if(products){
-            res.setHeader('Content-Type','application/json');
-            return res.status(200).json(products);
-        }else{
-            res.setHeader('Content-Type','application/json');
-            return res.status(400).json({error:`There are no carts with id: ${id}`});
-        }
-    }catch (error) {
-        console.log(error)
-        res.setHeader('Content-Type','application/json');
-        return res.status(500).json({error:"Internal server error."})
+    let products = await cartsMongo.getCartbyId(id);
+
+    if (products) {
+      res.setHeader("Content-Type", "application/json");
+      return res.status(200).json(products);
+    } else {
+      res.setHeader("Content-Type", "application/json");
+      return res
+        .status(400)
+        .json({ error: `There are no carts with id: ${id}` });
     }
-})
-    
+  } catch (error) {
+    console.log(error);
+    res.setHeader("Content-Type", "application/json");
+    return res.status(500).json({ error: "Internal server error." });
+  }
+});
 
-router2.post("/:cid/product/:pid", async (req,res)=>{
-try{
-    let cid = req.params.cid;
-    let pid = req.params.pid;
-    cid=Number(cid);
-    pid=Number(pid);
-        if(isNaN(cid) || isNaN(pid) ){
-            res.setHeader('Content-Type','application/json');
-            return res.status(400).json({error:"Id must be a number."});
-        }
-
-        const product = await productmanager.getProductbyId(pid);
-        if (!product) {
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(404).json({ error: `Product with id ${pid} was not found.` });
-        }
-
-        const updatedCart = await cartsmanager.addProductCart (cid, pid);
-
-        if(updatedCart){
-            res.setHeader('Content-Type','application/json');
-            return res.status(200).json({message:"Product added.",updatedCart});
-        }else{
-            res.setHeader('Content-Type','application/json');
-            return res.status(400).json({error:`There was an error updating cart.`});
-        }
-
-}catch (error) {
-        console.log(error)
-        res.setHeader('Content-Type','application/json');
-        return res.status(500).json({error:"Internal server error."})
+router2.post("/:cid/product/:pid", async (req, res) => {
+  try {
+    let { cid, pid } = req.params;
+    if (!isValidObjectId(cid) || !isValidObjectId(pid)) {
+      res.setHeader("Content-Type", "application/json");
+      return res.status(400).json({ error: "Please choose a valid Mongo id." });
     }
-})
+
+    const cart = await cartsMongo.getCartbyId(cid);
+    if (!cart) {
+      console.error("Cart not found!");
+      return null;
+    }
+
+    const product = await managerMongo.getProductbyId(pid);
+    if (!product) {
+      res.setHeader("Content-Type", "application/json");
+      return res
+        .status(404)
+        .json({ error: `Product with id ${pid} was not found.` });
+    }
+
+    const updatedCart = await cartsMongo.addProductCart(cart, pid);
+
+    if (updatedCart) {
+      res.setHeader("Content-Type", "application/json");
+      return res.status(200).json({ message: "Product added.", updatedCart });
+    } else {
+      res.setHeader("Content-Type", "application/json");
+      return res
+        .status(400)
+        .json({ error: `There was an error updating cart.` });
+    }
+  } catch (error) {
+    console.log(error);
+    res.setHeader("Content-Type", "application/json");
+    return res.status(500).json({ error: "Internal server error." });
+  }
+});
