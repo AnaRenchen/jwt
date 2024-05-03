@@ -6,19 +6,19 @@ export default class ProductManagerMongo {
   }
 
   async getProductBy(filter) {
-    return await productsModel.findOne(filter);
+    return await productsModel.findOne(filter).lean();
   }
 
   async addProduct(product) {
     return await productsModel.create(product);
   }
 
-  async getProductbyId(_id) {
-    return await productsModel.findOne({ _id });
+  async getProductbyId(id) {
+    return await productsModel.findOne({ _id: id });
   }
 
   async updateProduct(id, product) {
-    return await productsModel.findByIdAndUpdate(id, product, {
+    return await productsModel.findByIdAndUpdate({ _id: id }, product, {
       runValidators: true,
       returnDocument: "after",
     });
