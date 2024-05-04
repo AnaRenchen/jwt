@@ -94,7 +94,14 @@ router2.delete("/:cid/product/:pid", async (req, res) => {
       return res.status(400).json({ error: "Please choose valid Mongo IDs." });
     }
 
-    const updatedCart = await cartsMongo.deleteProductCart(cid, pid);
+    const cart = await cartsMongo.getCartbyId(cid);
+    if (!cart) {
+      return res
+        .status(404)
+        .json({ error: `Cart with id ${cid} was not found.` });
+    }
+
+    const updatedCart = await cartsMongo.deleteProductCart(cart, pid);
 
     if (!updatedCart) {
       return res

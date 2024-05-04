@@ -39,31 +39,22 @@ export default class CartsManagerMongo {
     }
   }
 
-  async deleteProductCart(cid, pid) {
+  async deleteProductCart(cart, pid) {
     try {
-      const cart = await cartsModel.findOne({ _id: cid });
-      if (!cart) {
-        throw new Error(`Cart with id ${cid} not found.`);
-      }
-
-      // Buscamos el producto en el carrito
       const productIndex = cart.products.findIndex(
-        (product) => product.product.toString() === pid
+        (p) => p.product._id.toString() === pid
       );
 
       if (productIndex === -1) {
         throw new Error(`Product with id ${pid} not found in the cart.`);
       }
 
-      // Si la cantidad es mayor que 1, simplemente reducimos la cantidad
       if (cart.products[productIndex].quantity > 1) {
         cart.products[productIndex].quantity -= 1;
       } else {
-        // Si la cantidad es 1, eliminamos el producto del carrito
         cart.products.splice(productIndex, 1);
       }
 
-      // Guardamos los cambios en el carrito
       await cart.save();
 
       return cart;
