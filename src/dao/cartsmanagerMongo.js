@@ -1,4 +1,7 @@
 import { cartsModel } from "./models/cartsModel.js";
+import ProductManagerMongo from "../dao/productmanagerMongo.js";
+
+const managerMongo = new ProductManagerMongo();
 
 export default class CartsManagerMongo {
   async getCarts() {
@@ -16,13 +19,17 @@ export default class CartsManagerMongo {
   async addProductCart(cart, pid) {
     try {
       const existingProduct = cart.products.find(
-        (p) => p.product.toString() === pid
+        (p) => p.product._id.toString() === pid
       );
 
       if (existingProduct) {
         existingProduct.quantity += 1;
       } else {
-        cart.products.push({ product: pid, quantity: 1 });
+        const product = await managerMongo.getProductbyId(pid);
+        if (!product) {
+          throw new Error(`Product with id ${pid} was not found.`);
+        }
+        cart.products.push({ product: product._id, quantity: 1 });
       }
 
       return await cart.save();
@@ -35,31 +42,34 @@ export default class CartsManagerMongo {
   async deleteProductCart(cid, pid) {
     try {
       const cart = await cartsModel.findOne({ _id: cid });
-
       if (!cart) {
-        throw new Error(`Cart with id ${cid} was not found.`);
+        throw new Error(`Cart with id ${cid} not found.`);
       }
 
+      // Buscamos el producto en el carrito
       const productIndex = cart.products.findIndex(
-        (p) => p.product.toString() === pid
+        (product) => product.product.toString() === pid
       );
 
       if (productIndex === -1) {
-        throw new Error(`Product with id ${pid} was not found in the cart.`);
+        throw new Error(`Product with id ${pid} not found in the cart.`);
       }
 
+      // Si la cantidad es mayor que 1, simplemente reducimos la cantidad
       if (cart.products[productIndex].quantity > 1) {
         cart.products[productIndex].quantity -= 1;
       } else {
+        // Si la cantidad es 1, eliminamos el producto del carrito
         cart.products.splice(productIndex, 1);
       }
 
+      // Guardamos los cambios en el carrito
       await cart.save();
 
       return cart;
     } catch (error) {
-      console.error("Error removing product from cart:", error);
-      return null;
+      console.error("Error deleting product from cart:", error);
+      throw error;
     }
   }
 
