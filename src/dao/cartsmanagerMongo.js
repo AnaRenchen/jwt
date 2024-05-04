@@ -39,6 +39,41 @@ export default class CartsManagerMongo {
     }
   }
 
+  async updateCartWithProducts(cart, products) {
+    try {
+      cart.products = products;
+
+      await cart.save();
+
+      return cart;
+    } catch (error) {
+      console.error("Error updating cart with products:", error.message);
+      throw error;
+    }
+  }
+
+  async updateProductQuantity(cid, pid, quantity) {
+    try {
+      const cart = await cartsModel.findById(cid);
+
+      const productIndex = cart.products.findIndex(
+        (product) => product.product.toString() === pid
+      );
+
+      if (productIndex === -1) {
+        throw new Error(`Product with id ${pid} not found in cart.`);
+      }
+
+      cart.products[productIndex].quantity = quantity;
+      await cart.save();
+
+      return cart;
+    } catch (error) {
+      console.error("Error updating product quantity:", error.message);
+      throw error;
+    }
+  }
+
   async deleteProductCart(cart, pid) {
     try {
       const productIndex = cart.products.findIndex(

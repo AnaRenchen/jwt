@@ -86,6 +86,113 @@ router2.post("/:cid/product/:pid", async (req, res) => {
   }
 });
 
+router2.put("/:cid", async (req, res) => {
+  try {
+    const { cid } = req.params;
+    const { products } = req.body;
+
+    if (!isValidObjectId(cid)) {
+      return res
+        .status(400)
+        .json({ error: "Please choose a valid Mongo ID for the cart." });
+    }
+
+    if (!Array.isArray(products)) {
+      return res.status(400).json({
+        error: "Please provide an array with properties product and quantity.",
+      });
+    }
+
+    const validProperties = ["product", "quantity"];
+
+    for (const product of products) {
+      const properties = Object.keys(product);
+      const valid = properties.every((prop) => validProperties.includes(prop));
+      if (!valid || properties.length !== validProperties.length) {
+        return res.status(400).json({
+          error:
+            "Each product should have only 'product' and 'quantity' properties.",
+        });
+      }
+
+      if (!isValidObjectId(product.product)) {
+        return res
+          .status(400)
+          .json({ error: `Invalid product ID: ${product.product}.` });
+      }
+    }
+
+    const cart = await cartsMongo.getCartbyId(cid);
+    if (!cart) {
+      throw new Error(`Cart with id ${cid} not found.`);
+    }
+
+    const updatedCart = await cartsMongo.updateCartWithProducts(cart, products);
+
+    if (!updatedCart) {
+      return res
+        .status(500)
+        .json({ error: "Failed to update cart with products." });
+    }
+
+    return res.status(200).json({
+      message: `Cart with id ${cid} was updated.`,
+      cart: updatedCart,
+    });
+  } catch (error) {
+    console.error("Error updating cart with products:", error);
+    return res.status(500).json({ error: "Internal server error." });
+  }
+});
+
+router2.put("/:cid/products/:pid", async (req, res) => {
+  try {
+    const { cid, pid } = req.params;
+    const { quantity } = req.body;
+
+    if (!isValidObjectId(cid) || !isValidObjectId(pid)) {
+      return res.status(400).json({
+        error: "Please choose a valid Mongo ID for the cart and product.",
+      });
+    }
+
+    if (!Number.isInteger(quantity) || quantity <= 0) {
+      return res.status(400).json({
+        error: "Please provide a valid quantity.",
+      });
+    }
+
+    const cart = await cartsMongo.getCartbyId(cid);
+    if (!cart) {
+      res.setHeader("Content-Type", "application/json");
+      return res.status(404).json({ error: "Cart not found." });
+    }
+
+    const findproduct = await managerMongo.getProductbyId(pid);
+
+    if (!findproduct) {
+      res.setHeader("Content-Type", "application/json");
+      return res
+        .status(404)
+        .json({ error: `Product with id ${pid} was not found.` });
+    }
+
+    const updatedQuantity = await cartsMongo.updateProductQuantity(
+      cid,
+      pid,
+      quantity
+    );
+
+    return res.status(200).json({
+      message: `Quantity of product with id ${pid} in cart with id ${cid} was updated.`,
+      cart: updatedQuantity,
+    });
+  } catch (error) {
+    console.error("Error updating product quantity:", error);
+    return res.status(500).json({ error: "Internal server error." });
+  }
+});
+
 router2.delete("/:cid/product/:pid", async (req, res) => {
   try {
     const { cid, pid } = req.params;

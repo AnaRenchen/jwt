@@ -5,6 +5,14 @@ export default class ProductManagerMongo {
     return await productsModel.find().lean();
   }
 
+  async getProductsPaginate(page = 1, limit) {
+    page = page == 0 ? 1 : page;
+    const query = limit
+      ? productsModel.paginate({}, { limit, page, lean: true })
+      : productsModel.paginate({}, { limit: 10, page, lean: true });
+    return await query;
+  }
+
   async getProductBy(filter) {
     return await productsModel.findOne(filter).lean();
   }

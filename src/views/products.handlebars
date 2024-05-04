@@ -22,7 +22,23 @@
 
 <main>
 
-  <h2 class="subtitulo"> Products Data </h2>
+   <h2 class="subtitulo"> Products Data </h2>
+
+  <div class="pagination">
+    <ul>
+      <li><a href="/products?pagina=1">Catalog</a></li>
+      {{#if prevPage}}
+        <li><a href="/products?pagina={{prevPage}}">Previous</a></li>
+      {{/if}}
+      {{#if nextPage}}
+        <li><a href="/products?pagina={{nextPage}}">Next</a></li>
+      {{/if}}
+      {{#if nextPage}}
+         <li><a href="/products?pagina={{totalPages}}">View Last in Catalog</a></li>
+      {{/if}}
+    </ul>
+  </div>
+  </div>
 
   <div class="table_container">
     {{#each products}}
@@ -40,6 +56,7 @@
     {{/each}}
 
   </div>
+
 </main>
 
 <footer></footer>
