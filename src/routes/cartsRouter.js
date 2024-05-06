@@ -27,7 +27,7 @@ router2.get("/:cid", async (req, res) => {
       return res.status(400).json({ error: "Please choose a valid Mongo id." });
     }
 
-    let products = await cartsMongo.getCartbyId(id);
+    let products = await cartsMongo.getCartbyId(id, false);
 
     if (products) {
       res.setHeader("Content-Type", "application/json");
@@ -53,7 +53,7 @@ router2.post("/:cid/product/:pid", async (req, res) => {
       return res.status(400).json({ error: "Please choose a valid Mongo id." });
     }
 
-    const cart = await cartsMongo.getCartbyId(cid);
+    const cart = await cartsMongo.getCartbyId(cid, false);
     if (!cart) {
       res.setHeader("Content-Type", "application/json");
       return res.status(404).json({ error: "Cart not found." });
@@ -122,7 +122,7 @@ router2.put("/:cid", async (req, res) => {
       }
     }
 
-    const cart = await cartsMongo.getCartbyId(cid);
+    const cart = await cartsMongo.getCartbyId(cid, false);
     if (!cart) {
       throw new Error(`Cart with id ${cid} not found.`);
     }
@@ -162,7 +162,7 @@ router2.put("/:cid/products/:pid", async (req, res) => {
       });
     }
 
-    const cart = await cartsMongo.getCartbyId(cid);
+    const cart = await cartsMongo.getCartbyId(cid, false);
     if (!cart) {
       res.setHeader("Content-Type", "application/json");
       return res.status(404).json({ error: "Cart not found." });
@@ -201,7 +201,7 @@ router2.delete("/:cid/product/:pid", async (req, res) => {
       return res.status(400).json({ error: "Please choose valid Mongo IDs." });
     }
 
-    const cart = await cartsMongo.getCartbyId(cid);
+    const cart = await cartsMongo.getCartbyId(cid, false);
     if (!cart) {
       return res
         .status(404)

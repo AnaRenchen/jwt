@@ -9,12 +9,39 @@ const managerMongo = new ProductManagerMongo();
 
 router.get("/", async (req, res) => {
   try {
-    let products = await managerMongo.getProducts();
     let limit = req.query.limit;
+    let category = req.query.category;
+    let stock = req.query.stock;
+    let sort = req.query.sort;
+    let page = req.query.page || 1;
+
+    const filter = {};
+    if (category) {
+      filter.category = category;
+    }
+
+    if (stock) {
+      filter.stock = stock;
+    }
+
+    let products = await managerMongo.getProducts(filter);
+
+    if (sort === "asc") {
+      products.sort((a, b) => a.price - b.price);
+    } else if (sort === "desc") {
+      products.sort((a, b) => b.price - a.price);
+    }
+
+    let perPage = 3;
+    let totalPages = Math.ceil(products.length / perPage);
+
+    let startIndex = (page - 1) * perPage;
+    let endIndex = page * perPage;
+    let paginatedProducts = products.slice(startIndex, endIndex);
 
     if (!limit) {
       res.setHeader("Content-Type", "application/json");
-      return res.status(200).json(products);
+      return res.status(200).json(paginatedProducts);
     }
 
     limit = Number(limit);
@@ -24,10 +51,15 @@ router.get("/", async (req, res) => {
     }
 
     if (limit && limit >= 0) {
-      products = products.slice(0, limit);
+      paginatedProducts = paginatedProducts.slice(0, limit);
     }
+
     res.setHeader("Content-Type", "application/json");
-    return res.status(200).json({ products });
+    return res.status(200).json({
+      products: paginatedProducts,
+      totalPages: totalPages,
+      currentPage: page,
+    });
   } catch (error) {
     console.log(error);
     res.setHeader("Content-Type", "application/json");

@@ -1,0 +1,30 @@
+<header>
+  <div class="up_page">
+    <a href="/home"><img
+        class="logo"
+        src="https://i.postimg.cc/JzVpc1S5/logo-header.png"
+        alt="logo"
+        width="80"
+      /></a>
+  </div>
+  <nav class="navbar">
+    <a href="/products">Products Data</a>
+    <a href="/realtimeproducts">Update Products</a>
+    <a href="/chat">Chat</a>
+  </nav>
+
+
+
+<div className="detail_container">
+      <div className="card_detail">
+        {{#each cart.products}}
+    <div class="product_detail">
+      <h3>{{product.title}}</h3>
+      <p>Category: {{product.category}}</p>
+      <p>Description: {{product.description}}</p>
+      <p>Price: ${{product.price}}</p>
+      <p>Quantity: {{quantity}}</p>
+    </div>
+    {{/each}}
+      </div>
+    </div>

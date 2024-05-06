@@ -22,22 +22,26 @@
 
 <main>
 
-   <h2 class="subtitulo"> Products Data </h2>
+  <h2 class="subtitulo"> Products Data </h2>
 
   <div class="pagination">
     <ul>
       <li><a href="/products?pagina=1">Catalog</a></li>
-      {{#if prevPage}}
-        <li><a href="/products?pagina={{prevPage}}">Previous</a></li>
+      {{#if hasPrevPage}}
+        <li><a href="/products?pagina={{prevLink}}">Previous</a></li>
+      {{/if}}
+      &nbsp;
+      {{currentpage}}
+      /
+      {{totalPages}}
+      &nbsp;
+      {{#if hasNextPage}}
+        <li><a href="/products?pagina={{nextLink}}">Next</a></li>
       {{/if}}
       {{#if nextPage}}
-        <li><a href="/products?pagina={{nextPage}}">Next</a></li>
-      {{/if}}
-      {{#if nextPage}}
-         <li><a href="/products?pagina={{totalPages}}">View Last in Catalog</a></li>
+        <li><a href="/products?pagina={{totalPages}}">View Last in Catalog</a></li>
       {{/if}}
     </ul>
-  </div>
   </div>
 
   <div class="table_container">
@@ -48,7 +52,9 @@
           <div class="card-body">
             <p>{{title}}</p>
             <p> {{description}} </p>
+            <p> Category: {{category}}</p>
             <p>Us${{price}}</p>
+            <p> Stock: {{stock}}</p>
             <button class="btn_cart">Add to cart </button>
           </div>
         </div>

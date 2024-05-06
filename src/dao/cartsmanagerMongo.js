@@ -12,8 +12,16 @@ export default class CartsManagerMongo {
     return await cartsModel.create(product);
   }
 
-  async getCartbyId(id) {
-    return await cartsModel.findOne({ _id: id }).populate("products.product");
+  async getCartbyId(id, useLean = false) {
+    const query = cartsModel.findOne({ _id: id }).populate("products.product");
+    return useLean ? query.lean() : query;
+  }
+
+  async getCartbyIdLean(id) {
+    return await cartsModel
+      .findOne({ _id: id })
+      .populate("products.product")
+      .lean();
   }
 
   async addProductCart(cart, pid) {
@@ -81,7 +89,7 @@ export default class CartsManagerMongo {
       );
 
       if (productIndex === -1) {
-        throw new Error(`Product with id ${pid} not found in the cart.`);
+        throw new Error(`Product with id ${pid} was not found in the cart.`);
       }
 
       if (cart.products[productIndex].quantity > 1) {
