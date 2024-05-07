@@ -60,7 +60,8 @@
             <p> Category: {{category}}</p>
             <p>Us${{price}}</p>
             <p> Stock: {{stock}}</p>
-            <button class="btn_cart" id="{{_id}}" data-cid="{{cid}}">Add to cart</button>
+            <button class="btn_cart" onclick="buy('{{_id}}')">Add to Cart
+            </button>
           </div>
         </div>
       </div>
@@ -70,4 +71,5 @@
 
 <footer></footer>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/assets/js/products.js"></script>

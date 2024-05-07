@@ -1,70 +1,21 @@
-const buy = async (pid, cid) => {
-  try {
-    if (!cid) {
-      const response = await fetch("/api/carts/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+const buy = async (pid) => {
+  let inputCart = document.getElementById("cartId");
+  let cid = inputCart.value;
+  console.log(`Product id: ${pid}, Cart id: ${cid}`);
 
-      if (response.ok) {
-        const cartData = await response.json();
-        cid = cartData._id;
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.error);
-      }
-    }
-
-    const response = await fetch(`/api/carts/${cid}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+  let response = await fetch(`/api/carts/${cid}/product/${pid}`, {
+    method: "post",
+  });
+  if (response.status === 200) {
+    let data = await response.json();
+    console.log(data);
+    Swal.fire({
+      imageUrl: "https://i.postimg.cc/ZqrV8yL4/cat.png",
+      text: "Product added to cart!",
+      background: "#87a7ae",
+      confirmButtonColor: "black",
+      toast: true,
+      timer: 2000,
     });
-
-    if (response.ok) {
-      const cartData = await response.json();
-      const existingProduct = cartData.products.find(
-        (product) => product.product === pid
-      );
-
-      if (existingProduct) {
-        const updatedQuantity = existingProduct.quantity + 1;
-        await fetch(`/api/carts/${cid}/products/${pid}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ quantity: updatedQuantity }),
-        });
-      } else {
-        await fetch(`/api/carts/${cid}/product/${pid}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-      }
-
-      console.log("Product added to cart successfully!");
-    } else {
-      const errorData = await response.json();
-      throw new Error(errorData.error);
-    }
-  } catch (error) {
-    console.error("Error:", error);
-    alert("Failed to add product to cart. Please try again later.");
   }
 };
-
-document.querySelectorAll(".btn_cart").forEach((button) => {
-  button.addEventListener("click", async () => {
-    const pid = button.id;
-    let cid = button.dataset.cid;
-
-    await buy(pid, cid);
-    console.log(`Product ID: ${pid}, Cart ID: ${cid}`);
-  });
-});
