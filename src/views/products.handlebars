@@ -49,6 +49,8 @@
 
   <input type="text" value="{{cartId}}" hidden id="cartId" />
 
+  <a class="goToCart" href="/carts/{{cartId}}">Go to Cart</a>
+
   <div class="table_container">
     {{#each products}}
       <div class="container_cards">
@@ -68,6 +70,8 @@
     {{/each}}
   </div>
 </main>
+
+<a href="/carts/{{cartId}}">Go to Cart</a>
 
 <footer></footer>
 

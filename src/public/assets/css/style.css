@@ -205,6 +205,7 @@ footer{
         justify-content:center;
         margin: 15px;
       }
+
       .pagination ul {
         list-style: none;
         padding: 0;
@@ -237,17 +238,17 @@ footer{
       .product_detail .cart {
         display: flex; 
         flex-direction: row; 
-        width: 50%; 
+        width: 60%; 
       }
       
       .product_detail .cart .image_cart {
-        width: 50%; 
+        width: 40%; 
         height: auto;
         object-fit: cover;
       }
       
       .product_detail .cart .cart-body {
-        width: 80%; 
+        width: 100%; 
         color: #242220;
         font-family: "Times New Roman", Times, serif;
         font-size: 1.2rem;
@@ -260,9 +261,42 @@ footer{
         margin-bottom: 10px;
       }
 
+      .cart_main{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        margin: 100px;
+        font-size: 2rem;
+        color:#242220;
+      }
+
       .cart_title{
         font-family: 'Times New Roman', Times, serif;
         font-size: 1.2rem;
         margin-bottom: 20px;
+        color:#242220;
       }
+
+      .goToCart {
+        display: flex;
+        justify-content: flex-end;
+        margin-right: 100px;
+        text-decoration: none;
+        padding: 5px 10px;
+        color: #242220;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 1.2rem;
+        letter-spacing: 0.8;
+        transition: color 0.3s, text-shadow 0.3s; 
+      }
+      
+      .goToCart:hover {
+        color: #87a7ae; 
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); 
+      }
+    
+      
 
