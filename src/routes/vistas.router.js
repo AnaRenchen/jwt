@@ -87,6 +87,8 @@ router3.get("/realtimeproducts", async (req, res) => {
 
 router3.get("/products", async (req, res) => {
   try {
+    let cartId = "663a782902d59739d834e865";
+
     let limit = req.query.limit || 10;
     let page = req.query.page || 1;
     let sort = req.query.sort;
@@ -144,6 +146,7 @@ router3.get("/products", async (req, res) => {
       hasNextPage: hasNextPage,
       prevLink: prevLink,
       nextLink: nextLink,
+      cartId,
     });
   } catch (error) {
     console.log(error);

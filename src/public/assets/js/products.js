@@ -1,7 +1,24 @@
-const createCart = async () => {
+const buy = async (pid, cid) => {
   try {
-    const response = await fetch("/api/carts", {
-      method: "POST",
+    if (!cid) {
+      const response = await fetch("/api/carts/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const cartData = await response.json();
+        cid = cartData._id;
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.error);
+      }
+    }
+
+    const response = await fetch(`/api/carts/${cid}`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
@@ -9,35 +26,29 @@ const createCart = async () => {
 
     if (response.ok) {
       const cartData = await response.json();
-      return cartData._id;
-    } else {
-      const errorData = await response.json();
-      throw new Error(errorData.error);
-    }
-  } catch (error) {
-    console.error("Error:", error);
-    alert("Failed to create a new cart. Please try again later.");
-    return null;
-  }
-};
+      const existingProduct = cartData.products.find(
+        (product) => product.product === pid
+      );
 
-const buy = async (pid, cid) => {
-  try {
-    if (!cid) {
-      // Si no hay un ID de carrito, crear uno nuevo
-      cid = await createCart();
-      if (!cid) return; // Si no se puede crear un carrito, salir de la función
-    }
+      if (existingProduct) {
+        const updatedQuantity = existingProduct.quantity + 1;
+        await fetch(`/api/carts/${cid}/products/${pid}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ quantity: updatedQuantity }),
+        });
+      } else {
+        await fetch(`/api/carts/${cid}/product/${pid}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      }
 
-    const response = await fetch(`/api/carts/${cid}/product/${pid}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (response.ok) {
-      alert("Product added to cart successfully!");
+      console.log("Product added to cart successfully!");
     } else {
       const errorData = await response.json();
       throw new Error(errorData.error);
@@ -51,7 +62,8 @@ const buy = async (pid, cid) => {
 document.querySelectorAll(".btn_cart").forEach((button) => {
   button.addEventListener("click", async () => {
     const pid = button.id;
-    let cid = button.dataset.cid; // Obtener el ID del carrito desde el botón
+    let cid = button.dataset.cid;
+
     await buy(pid, cid);
     console.log(`Product ID: ${pid}, Cart ID: ${cid}`);
   });
