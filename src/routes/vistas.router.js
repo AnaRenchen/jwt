@@ -8,7 +8,7 @@ const cartsMongo = new CartsManagerMongo();
 
 router3.get("/home", async (req, res) => {
   try {
-    let products = await managerMongo.getProducts();
+    let { docs: products } = await managerMongo.getProductsPaginate();
 
     res.setHeader("Content-Type", "text/html");
     res.status(200).render("home", { products, titulo: "Horisada" });
@@ -21,81 +21,133 @@ router3.get("/home", async (req, res) => {
 
 router3.get("/realtimeproducts", async (req, res) => {
   try {
-    let products = await managerMongo.getProducts();
+    let limit = req.query.limit || 10;
+    let page = req.query.page || 1;
+    let sort = req.query.sort;
 
-    res.setHeader("Content-Type", "text/html");
-    res.status(200).render("realTimeProducts", { products });
+    const filter = {};
+    const validCategories = [
+      "title",
+      "description",
+      "price",
+      "thumbnail",
+      "code",
+      "stock",
+      "status",
+      "category",
+    ];
+
+    for (const key in req.query) {
+      if (validCategories.includes(key)) {
+        filter[key] = req.query[key];
+      }
+    }
+
+    const sortOptions = {};
+    if (sort === "asc") {
+      sortOptions.price = 1;
+    } else if (sort === "desc") {
+      sortOptions.price = -1;
+    }
+
+    let result = await managerMongo.getProductsPaginate(
+      page,
+      limit,
+      filter,
+      sortOptions
+    );
+
+    const hasNextPage = result.nextPage !== null;
+    const hasPrevPage = result.prevPage !== null;
+
+    const prevLink = hasPrevPage
+      ? `/products?page=${result.prevPage}&limit=${limit}`
+      : null;
+    const nextLink = hasNextPage
+      ? `/products?page=${result.nextPage}&limit=${limit}`
+      : null;
+
+    res.render("realtimeproducts", {
+      status: "success",
+      products: result.docs,
+      totalPages: result.totalPages,
+      prevPage: result.prevPage,
+      nextPage: result.nextPage,
+      page: page,
+      hasPrevPage: hasPrevPage,
+      hasNextPage: hasNextPage,
+      prevLink: prevLink,
+      nextLink: nextLink,
+    });
   } catch (error) {
     console.log(error);
-    res.setHeader("Content-Type", "text/html");
-    return res.status(500).json({ error: "Internal server error." });
+    res.status(500).send("Internal server error");
   }
 });
 
 router3.get("/products", async (req, res) => {
   try {
-    let { page, limit, category, stock, sort } = req.query;
-    if (!page) page = 1;
-    if (!limit) limit = 10;
-
-    let totalProducts = await managerMongo.getProducts();
+    let limit = req.query.limit || 10;
+    let page = req.query.page || 1;
+    let sort = req.query.sort;
 
     const filter = {};
-    if (category) {
-      filter.category = category;
-    }
-    if (stock) {
-      filter.stock = stock;
-    }
+    const validCategories = [
+      "title",
+      "description",
+      "price",
+      "thumbnail",
+      "code",
+      "stock",
+      "status",
+      "category",
+    ];
 
-    const sortOption = {};
-    if (sort) {
-      if (sort === "price_asc") {
-        sortOption.price = 1;
-      } else if (sort === "price_desc") {
-        sortOption.price = -1;
+    for (const key in req.query) {
+      if (validCategories.includes(key)) {
+        filter[key] = req.query[key];
       }
     }
 
-    let {
-      docs: products,
-      payload,
-      totalPages,
-      page: currentpage,
-      hasPrevPage,
-      hasNextPage,
-      prevPage,
-      nextPage,
-    } = await managerMongo.getProductsPaginate(page, limit, sortOption, filter);
+    const sortOptions = {};
+    if (sort === "asc") {
+      sortOptions.price = 1;
+    } else if (sort === "desc") {
+      sortOptions.price = -1;
+    }
+
+    let result = await managerMongo.getProductsPaginate(
+      page,
+      limit,
+      filter,
+      sortOptions
+    );
+
+    const hasNextPage = result.nextPage !== null;
+    const hasPrevPage = result.prevPage !== null;
 
     const prevLink = hasPrevPage
-      ? `http://localhost:3000/products?page=${prevPage}`
-      : "";
+      ? `/products?page=${result.prevPage}&limit=${limit}`
+      : null;
     const nextLink = hasNextPage
-      ? `http://localhost:3000/products?page=${nextPage}`
-      : "";
+      ? `/products?page=${result.nextPage}&limit=${limit}`
+      : null;
 
-    res.setHeader("Content-Type", "text/html");
-    res.status(200).render("products", {
+    res.render("products", {
       status: "success",
-      products,
-      payload,
-      totalPages,
-      prevPage,
-      nextPage,
-      currentpage,
-      hasPrevPage,
-      hasNextPage,
-      prevLink,
-      nextLink,
-      totalProducts,
-      category,
-      sort,
+      products: result.docs,
+      totalPages: result.totalPages,
+      prevPage: result.prevPage,
+      nextPage: result.nextPage,
+      page: page,
+      hasPrevPage: hasPrevPage,
+      hasNextPage: hasNextPage,
+      prevLink: prevLink,
+      nextLink: nextLink,
     });
   } catch (error) {
     console.log(error);
-    res.setHeader("Content-Type", "text/html");
-    return res.status(500).json({ error: "Internal server error." });
+    res.status(500).send("Internal server error");
   }
 });
 
@@ -113,7 +165,7 @@ router3.get("/chat", async (req, res) => {
 router3.get("/carts/:cid", async (req, res) => {
   try {
     const cid = req.params.cid;
-    const cart = await cartsMongo.getCartbyId(cid, true);
+    const cart = await cartsMongo.getCartbyId({ _id: cid }, true);
 
     if (!cart) {
       res.status(404).send("Cart not found");

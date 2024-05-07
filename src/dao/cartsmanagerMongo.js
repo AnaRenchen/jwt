@@ -17,13 +17,6 @@ export default class CartsManagerMongo {
     return useLean ? query.lean() : query;
   }
 
-  async getCartbyIdLean(id) {
-    return await cartsModel
-      .findOne({ _id: id })
-      .populate("products.product")
-      .lean();
-  }
-
   async addProductCart(cart, pid) {
     try {
       const existingProduct = cart.products.find(
@@ -65,7 +58,7 @@ export default class CartsManagerMongo {
       const cart = await cartsModel.findById(cid);
 
       const productIndex = cart.products.findIndex(
-        (product) => product.product.toString() === pid
+        (product) => product.product._id.toString() === pid
       );
 
       if (productIndex === -1) {

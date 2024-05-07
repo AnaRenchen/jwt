@@ -9,61 +9,71 @@ const managerMongo = new ProductManagerMongo();
 
 router.get("/", async (req, res) => {
   try {
-    let limit = req.query.limit;
-    let category = req.query.category;
-    let stock = req.query.stock;
-    let sort = req.query.sort;
+    let limit = req.query.limit || 10;
     let page = req.query.page || 1;
+    let sort = req.query.sort;
 
     const filter = {};
-    if (category) {
-      filter.category = category;
+    const validCategories = [
+      "title",
+      "description",
+      "price",
+      "thumbnail",
+      "code",
+      "stock",
+      "status",
+      "category",
+    ];
+
+    for (const key in req.query) {
+      if (validCategories.includes(key)) {
+        filter[key] = req.query[key];
+      }
     }
 
-    if (stock) {
-      filter.stock = stock;
-    }
-
-    let products = await managerMongo.getProducts(filter);
-
+    const sortOptions = {};
     if (sort === "asc") {
-      products.sort((a, b) => a.price - b.price);
+      sortOptions.price = 1;
     } else if (sort === "desc") {
-      products.sort((a, b) => b.price - a.price);
+      sortOptions.price = -1;
     }
 
-    let perPage = 3;
-    let totalPages = Math.ceil(products.length / perPage);
+    let result = await managerMongo.getProductsPaginate(
+      page,
+      limit,
+      filter,
+      sortOptions
+    );
 
-    let startIndex = (page - 1) * perPage;
-    let endIndex = page * perPage;
-    let paginatedProducts = products.slice(startIndex, endIndex);
+    const hasNextPage = result.nextPage !== null;
+    const hasPrevPage = result.prevPage !== null;
 
-    if (!limit) {
-      res.setHeader("Content-Type", "application/json");
-      return res.status(200).json(paginatedProducts);
-    }
-
-    limit = Number(limit);
-    if (isNaN(limit)) {
-      res.setHeader("Content-Type", "application/json");
-      return res.status(400).json({ error: "Limit must be a number." });
-    }
-
-    if (limit && limit >= 0) {
-      paginatedProducts = paginatedProducts.slice(0, limit);
-    }
+    const prevLink = hasPrevPage
+      ? `http://localhost:3000/products?page=${result.prevPage}&limit=${limit}`
+      : null;
+    const nextLink = hasNextPage
+      ? `http://localhost:3000/products?page=${result.nextPage}&limit=${limit}`
+      : null;
 
     res.setHeader("Content-Type", "application/json");
     return res.status(200).json({
-      products: paginatedProducts,
-      totalPages: totalPages,
-      currentPage: page,
+      status: "success",
+      payload: result.docs,
+      totalPages: result.totalPages,
+      prevPage: result.prevPage,
+      nextPage: result.nextPage,
+      page: page,
+      hasPrevPage: hasPrevPage,
+      hasNextPage: hasNextPage,
+      prevLink: prevLink,
+      nextLink: nextLink,
     });
   } catch (error) {
     console.log(error);
     res.setHeader("Content-Type", "application/json");
-    return res.status(500).json({ error: "Internal server error." });
+    return res
+      .status(500)
+      .json({ status: "error", error: "Internal server error." });
   }
 });
 
@@ -148,7 +158,7 @@ router.post("/", async (req, res) => {
       stock,
     });
 
-    let productsList = await managerMongo.getProducts();
+    let { docs: productsList } = await managerMongo.getProductsPaginate();
     io.emit("newproduct", productsList);
     console.log("added");
 
@@ -255,7 +265,7 @@ router.delete("/:pid", async (req, res) => {
 
     let result = await managerMongo.deleteProduct(id);
     if (result.deletedCount > 0) {
-      let products = await managerMongo.getProducts();
+      let { docs: products } = await managerMongo.getProductsPaginate();
       io.emit("deletedproduct", products);
       console.log("Product deleted");
       return res

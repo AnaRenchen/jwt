@@ -14,17 +14,22 @@
   </nav>
 
 
+  <h2 id="cart" data-cid="{{cart._id}}">Cart</h2>
 
-<div className="detail_container">
-      <div className="card_detail">
-        {{#each cart.products}}
-    <div class="product_detail">
-      <h3>{{product.title}}</h3>
-      <p>Category: {{product.category}}</p>
-      <p>Description: {{product.description}}</p>
+{{#each cart.products}}
+<div class="product_detail">
+  <div class="cart">
+    <img src="{{product.thumbnail}}" class="image_cart" alt="{{product.title}}" />
+    <div class="cart-body">
+      <h3 class="cart_title"> {{product.title}}</h3>
       <p>Price: ${{product.price}}</p>
       <p>Quantity: {{quantity}}</p>
     </div>
+  </div>
+</div>
     {{/each}}
       </div>
     </div>
+    </main>
+
+<footer></footer>

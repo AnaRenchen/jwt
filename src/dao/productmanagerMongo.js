@@ -1,12 +1,14 @@
 import { productsModel } from "./models/productsModel.js";
 
 export default class ProductManagerMongo {
-  async getProducts(filter = {}) {
-    return await productsModel.find(filter).lean();
-  }
-
-  async getProductsPaginate(page = 1, limit, filter = {}) {
-    return await productsModel.paginate(filter, { limit, page, lean: true });
+  async getProductsPaginate(page = 1, limit = 10, filter = {}, sort = {}) {
+    const options = {
+      page: page,
+      limit: parseInt(limit),
+      lean: true,
+      sort: sort,
+    };
+    return await productsModel.paginate(filter, options);
   }
 
   async getProductBy(filter) {
