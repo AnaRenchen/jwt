@@ -6,6 +6,11 @@
         alt="logo"
         width="80"
       /></a>
+    <a href="/carts/{{cartId}}"><img
+        class="cart_icon"
+        src="https://i.postimg.cc/rF4ScZMk/icons8-cart-48.png"
+        alt=""
+      /></a>
   </div>
   <nav class="navbar">
     <a href="/home">Home</a>
@@ -48,8 +53,6 @@
   </div>
 
   <input type="text" value="{{cartId}}" hidden id="cartId" />
-
-  <a class="goToCart" href="/carts/{{cartId}}">Go to Cart</a>
 
   <div class="table_container">
     {{#each products}}

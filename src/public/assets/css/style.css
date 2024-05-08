@@ -13,10 +13,16 @@
     background-color: rgba(255, 255, 255, 2);
 }
 
-.up_page{
-    height: 6em;
+
+.up_page {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; 
+    box-sizing: border-box; 
     background-color: #87a7ae;
-}
+  }
+
 
 .logo{
     margin: 12px;
@@ -268,9 +274,11 @@ footer{
         font-family: 'Times New Roman', Times, serif;
         font-size: 1.2rem;
         margin-bottom: 20px;
-        margin: 100px;
+        margin: 70px;
         font-size: 2rem;
         color:#242220;
+        font-weight: lighter;
+        letter-spacing: 0.05em;
       }
 
       .cart_title{
@@ -280,22 +288,12 @@ footer{
         color:#242220;
       }
 
-      .goToCart {
+
+      .cart_icon{
         display: flex;
-        justify-content: flex-end;
-        margin-right: 100px;
-        text-decoration: none;
-        padding: 5px 10px;
-        color: #242220;
-        font-family: 'Times New Roman', Times, serif;
-        font-size: 1.2rem;
-        letter-spacing: 0.8;
-        transition: color 0.3s, text-shadow 0.3s; 
-      }
-      
-      .goToCart:hover {
-        color: #87a7ae; 
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); 
+        flex-wrap: wrap;
+        width:35px;  
+        margin-right: 50px;
       }
     
       
