@@ -40,13 +40,19 @@ export default class CartsManagerMongo {
     }
   }
 
-  async updateCartWithProducts(cart, products) {
+  async updateCartWithProducts(cid, products) {
     try {
-      cart.products = products;
+      const updatedCart = await cartsModel.findOneAndUpdate(
+        { _id: cid },
+        { $set: { products: products } },
+        { new: true }
+      );
 
-      await cart.save();
+      if (!updatedCart) {
+        throw new Error(`Cart with id ${cid} not found.`);
+      }
 
-      return cart;
+      return updatedCart;
     } catch (error) {
       console.error("Error updating cart with products:", error.message);
       throw error;
@@ -55,22 +61,14 @@ export default class CartsManagerMongo {
 
   async updateProductQuantity(cid, pid, quantity) {
     try {
-      const cart = await cartsModel.findById(cid);
-
-      const productIndex = cart.products.findIndex(
-        (product) => product.product._id.toString() === pid
+      const updatedCart = await cartsModel.findOneAndUpdate(
+        { _id: cid, "products.product": pid },
+        { $set: { "products.$.quantity": quantity } },
+        { new: true }
       );
-
-      if (productIndex === -1) {
-        throw new Error(`Product with id ${pid} not found in cart.`);
-      }
-
-      cart.products[productIndex].quantity = quantity;
-      await cart.save();
-
-      return cart;
+      return updatedCart;
     } catch (error) {
-      console.error("Error updating product quantity:", error.message);
+      console.error("Error updating product quantity:", error);
       throw error;
     }
   }
