@@ -20,7 +20,6 @@
   </nav>
 
   <h1 class="titulo"> Horisada´s Paintings </h1>
-  <h4 class="greeting">いらっしゃいませ</h4>
 
   <div class="div_space"></div>
 
@@ -44,7 +43,7 @@
         &nbsp;
       {{/if}}
       {{#if hasNextPage}}
-         <li><a href="/products?page={{nextPage}}{{#if limit}}&limit={{limit}}{{/if}}">Next</a></li>
+        <li><a href="/products?page={{nextPage}}">Next</a></li>
       {{/if}}
       {{#if nextPage}}
         <li><a href="/products?page={{totalPages}}">View Last in Catalog</a></li>
@@ -73,7 +72,6 @@
     {{/each}}
   </div>
 </main>
-
 
 <footer></footer>
 
