@@ -8,10 +8,12 @@ const cartsMongo = new CartsManagerMongo();
 
 router3.get("/home", async (req, res) => {
   try {
+    let cartId = "663a9a3d9002c4c009f36832";
+
     let { docs: products } = await managerMongo.getProductsPaginate();
 
     res.setHeader("Content-Type", "text/html");
-    res.status(200).render("home", { products, titulo: "Horisada" });
+    res.status(200).render("home", { products, cartId, titulo: "Horisada" });
   } catch (error) {
     console.log(error);
     res.setHeader("Content-Type", "text/html");

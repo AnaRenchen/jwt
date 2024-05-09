@@ -6,6 +6,11 @@
         alt="logo"
         width="80"
       /></a>
+    <a href="/carts/{{cartId}}"><img
+        class="cart_icon"
+        src="https://i.postimg.cc/rF4ScZMk/icons8-cart-48.png"
+        alt=""
+      /></a>
   </div>
   <nav class="navbar">
     <a href="/home">Home</a>
@@ -17,30 +22,53 @@
   <h1 class="titulo"> Horisada´s Paintings </h1>
   <h4 class="greeting">いらっしゃいませ</h4>
 
-  <div class="div_space"></div>
-
 </header>
 
 <main>
 
-  <h2 class="subtitulo"> Products Data </h2>
+  <div class="slideshow-container">
 
-  <div class="table_container">
-    {{#each products}}
-      <div class="container_cards">
-        <div class="card">
-          <img src="{{thumbnail}}" class="card-img-top" alt="{{title}}" />
-          <div class="card-body">
-            <p>{{title}}</p>
-            <p> {{description}} </p>
-            <p>Us${{price}}</p>
-            <button class="btn_cart">Add to cart </button>
-          </div>
-        </div>
-      </div>
-    {{/each}}
+    <div class="mySlides fade">
+      <div class="numbertext">1 / 4</div>
+      <img src="https://i.postimg.cc/SxYXM1z2/peonias.jpg" style="width:100%" />
+      <div class="text">botan</div>
+    </div>
 
+    <div class="mySlides fade">
+      <div class="numbertext">2 / 4</div>
+      <img
+        src="https://i.postimg.cc/YqfjS0Qk/mascara-pelos.jpg"
+        style="width:100%"
+      />
+      <div class="text">kiyohime</div>
+    </div>
+
+    <div class="mySlides fade">
+      <div class="numbertext">3 / 4</div>
+      <img src="https://i.postimg.cc/W3Fhp7wf/dragon.jpg" style="width:100%" />
+      <div class="text">unryu</div>
+    </div>
+
+    <div class="mySlides fade">
+      <div class="numbertext">4 / 4</div>
+      <img src="https://i.postimg.cc/90mgn7jT/jiraya.jpg" style="width:100%" />
+      <div class="text">jiraya</div>
+    </div>
+
+    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1)">&#10095;</a>
   </div>
+  <br />
+
+  <div style="text-align:center">
+    <span class="dot" onclick="currentSlide(1)"></span>
+    <span class="dot" onclick="currentSlide(2)"></span>
+    <span class="dot" onclick="currentSlide(3)"></span>
+    <span class="dot" onclick="currentSlide(4)"></span>
+  </div>
+
 </main>
 
 <footer></footer>
+
+<script src="/assets/js/home.js"></script>
