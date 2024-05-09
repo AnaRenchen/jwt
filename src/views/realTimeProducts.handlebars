@@ -22,6 +22,28 @@
 
   <h2 class="subtitulo"> Update Products </h2>
 
+  <div class="pagination">
+    <ul>
+      <li><a href="/products?page=1">Catalog</a></li>
+      {{#if hasPrevPage}}
+        <li><a href="/products?page={{prevPage}}">Previous</a></li>
+      {{/if}}
+      {{#if hasNextPage}}
+        &nbsp;
+        {{currentpage}}
+        /
+        {{totalPages}}
+        &nbsp;
+      {{/if}}
+      {{#if hasNextPage}}
+        <li><a href="/products?page={{nextPage}}">Next</a></li>
+      {{/if}}
+      {{#if nextPage}}
+        <li><a href="/products?page={{totalPages}}">View Last in Catalog</a></li>
+      {{/if}}
+    </ul>
+  </div>
+
   <div class="table_container">
     <table>
       <thead>
