@@ -288,6 +288,8 @@ footer{
         color:#242220;
       }
 
+      
+
 
       .cart_icon{
         display: flex;
@@ -296,6 +298,44 @@ footer{
         margin-right: 50px;
       }
 
+      .subtitle_hotproducts{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        margin: 70px;
+        font-size: 2rem;
+        color:#242220;
+        font-weight: lighter;
+        letter-spacing: 0.05em;
+      }
+
+      .btn_products{
+        text-decoration: none; 
+        background-color: transparent;
+        color: #2a305c;
+        width: 200px;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 1.1rem;
+        letter-spacing: 0.05em;
+        font-weight: bold;
+        margin-top: 10px; 
+        margin-bottom: 50px;
+        padding: 10px;
+        border: none; 
+        cursor: pointer;
+        text-align: center;
+    }
+    
+    .btn_products:hover{
+      background-color: #87a7ae;
+      color: #242220;
+    }
+
+
+      
 
 .slideshow-container {
     max-width: 700px;
