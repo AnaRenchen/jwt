@@ -1,0 +1,55 @@
+<header>
+  <div class="up_page">
+    <a href="/home">
+      <img class="logo" src="https://i.postimg.cc/JzVpc1S5/logo-header.png" alt="logo" width="80" />
+    </a>
+    <div class="cart_menu_container">
+      <a href="/carts/{{cartId}}">
+        <img class="cart_icon" src="https://i.postimg.cc/rF4ScZMk/icons8-cart-48.png" alt="" />
+      </a>
+      <div class="menu2">
+        {{>menu2}}
+      </div>
+    </div>
+  </div>
+  {{>menu}}
+</header>
+
+<main>
+<form action="/api/sessions/login" method="post">
+  <div class="imgcontainer">
+    <img
+      src="https://i.postimg.cc/VkzpZyKM/storyline-laptop-with-cat.png"
+      alt="Avatar"
+      class="avatar"
+    />
+  </div>
+
+  <div class="container_form">
+
+     {{#if error}}
+        <div class= "error_message"
+        >{{error}}</div>
+    {{/if}}
+
+    <label for="email"><b>Email</b></label>
+    <input class="form_input" type="email" placeholder="Enter Email" name="email" />
+
+    <label for="password"><b>Password</b></label>
+    <input  class="form_input"  type="password" placeholder="Enter Password" name="password" />
+    <input type="text" name="web" value="web" hidden>
+
+   <div class="button-container">
+  <button class="button_form" type="submit" >Login</button>
+</div>
+  </div>
+</form>
+
+<div class="registration_login">
+    <p class="register_msg"> Not registered yet?</p>
+    <a href="/register"><button class="register_login_button">Register</button></a>
+</div>
+</main>
+
+<footer></footer>
+

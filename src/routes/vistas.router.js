@@ -1,6 +1,8 @@
 import { Router } from "express";
 import ProductManagerMongo from "../dao/productmanagerMongo.js";
 import CartsManagerMongo from "../dao/cartsmanagerMongo.js";
+import { auth } from "../middleware/auth.js";
+
 export const router3 = Router();
 
 const managerMongo = new ProductManagerMongo();
@@ -21,7 +23,7 @@ router3.get("/home", async (req, res) => {
   }
 });
 
-router3.get("/realtimeproducts", async (req, res) => {
+router3.get("/realtimeproducts", auth, async (req, res) => {
   try {
     let limit = req.query.limit || 10;
     let page = req.query.page || 1;
@@ -137,6 +139,17 @@ router3.get("/products", async (req, res) => {
       ? `/products?page=${result.nextPage}&limit=${limit}`
       : null;
 
+    const loginSuccess = req.query.loginSuccess === "true";
+
+    let userName = "";
+    let isAdmin = false;
+    if (req.session.user) {
+      userName = req.session.user.name;
+    }
+    if (req.session.user && req.session.user.email === "adminCoder@coder.com") {
+      isAdmin = true;
+    }
+
     res.render("products", {
       status: "success",
       products: result.docs,
@@ -149,6 +162,9 @@ router3.get("/products", async (req, res) => {
       prevLink: prevLink,
       nextLink: nextLink,
       cartId,
+      loginSuccess: loginSuccess,
+      userName: userName,
+      isAdmin: isAdmin,
     });
   } catch (error) {
     console.log(error);
@@ -167,7 +183,7 @@ router3.get("/chat", async (req, res) => {
   }
 });
 
-router3.get("/carts/:cid", async (req, res) => {
+router3.get("/carts/:cid", auth, async (req, res) => {
   try {
     const cid = req.params.cid;
     const cart = await cartsMongo.getCartbyId({ _id: cid }, true);
@@ -177,6 +193,39 @@ router3.get("/carts/:cid", async (req, res) => {
       return;
     }
     res.status(200).render("carts", { cart });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal server error");
+  }
+});
+
+router3.get("/register", async (req, res) => {
+  try {
+    let { error } = req.query;
+
+    res.status(200).render("register", { error });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal server error");
+  }
+});
+
+router3.get("/login", async (req, res) => {
+  try {
+    let { error } = req.query;
+
+    res.status(200).render("login", { error });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal server error");
+  }
+});
+
+router3.get("/profile", auth, async (req, res) => {
+  try {
+    let cartId = "663a9a3d9002c4c009f36832";
+
+    res.status(200).render("profile", { user: req.session.user, cartId });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");

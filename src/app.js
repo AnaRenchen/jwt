@@ -4,16 +4,25 @@ import { engine } from "express-handlebars";
 import { router as productsRouter } from "./routes/productsRouter.js";
 import { router2 as cartsRouter } from "./routes/cartsRouter.js";
 import { router3 as viewsRouter } from "./routes/vistas.router.js";
+import { router4 as sessionsRouter } from "./routes/sessionsRouter.js";
 import __dirname from "./utils.js";
 import path from "path";
 import mongoose from "mongoose";
 import { messagesModel } from "./dao/models/messagesModel.js";
+import sessions from "express-session";
 
 const PORT = 3000;
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  sessions({
+    secret: "AnaRenchen123",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 
 app.engine("handlebars", engine());
 app.set("views", path.join(__dirname, "views"));
@@ -23,6 +32,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
+app.use("/api/sessions", sessionsRouter);
 app.use("/", viewsRouter);
 
 let users = [];

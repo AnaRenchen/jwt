@@ -1,27 +1,21 @@
 <header>
   <div class="up_page">
-    <a href="/home"><img
-        class="logo"
-        src="https://i.postimg.cc/JzVpc1S5/logo-header.png"
-        alt="logo"
-        width="80"
-      /></a>
-    <a href="/carts/{{cartId}}"><img
-        class="cart_icon"
-        src="https://i.postimg.cc/rF4ScZMk/icons8-cart-48.png"
-        alt=""
-      /></a>
+    <a href="/home">
+      <img class="logo" src="https://i.postimg.cc/JzVpc1S5/logo-header.png" alt="logo" width="80" />
+    </a>
+    <div class="cart_menu_container">
+      <a href="/carts/{{cartId}}">
+        <img class="cart_icon" src="https://i.postimg.cc/rF4ScZMk/icons8-cart-48.png" alt="" />
+      </a>
+      <div class="menu2">
+        {{>menu2}}
+      </div>
+    </div>
   </div>
-  <nav class="navbar">
-    <a href="/home">Home</a>
-    <a href="/products">Products Data</a>
-    <a href="/realtimeproducts">Update Products</a>
-    <a href="/chat">Chat</a>
-  </nav>
+  {{>menu}}
 
-  <h1 class="titulo"> Horisada´s Paintings </h1>
+  <h1 class="titulo">Horisada´s Paintings</h1>
   <h4 class="greeting">いらっしゃいませ</h4>
-
 </header>
 
 <main>
@@ -112,3 +106,4 @@
 <footer></footer>
 
 <script src="/assets/js/home.js"></script>
+<script src="/assets/js/logout.js"></script>

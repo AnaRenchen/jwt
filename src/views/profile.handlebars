@@ -1,0 +1,38 @@
+<header>
+  <div class="up_page">
+    <a href="/home">
+      <img class="logo" src="https://i.postimg.cc/JzVpc1S5/logo-header.png" alt="logo" width="80" />
+    </a>
+    <div class="cart_menu_container">
+      <a href="/carts/{{cartId}}">
+        <img class="cart_icon" src="https://i.postimg.cc/rF4ScZMk/icons8-cart-48.png" alt="" />
+      </a>
+      <div class="menu2">
+        {{>menu2}}
+      </div>
+    </div>
+  </div>
+  {{>menu}}
+</header>
+
+<div class="welcome_profile">
+    <div class="subtitle_and_image_container">
+      <h2 class="subtitle_profile">Hello, {{user.name}}!</h2>
+      <div class="imgcontainer_profile">
+        <img src="https://i.postimg.cc/XNGdMmtG/3d-casual-life-chatgpt-robot-with-speech-bubble.png" alt="Avatar" width="100px" />
+      </div>
+    </div>
+  </div>
+  <div class="container_profile">
+    <div class="info_container">
+      <h3 class="info_profile">User Information:</h3>
+      <p class="texto_profile">Name: {{user.name}}</p>
+      <p class="texto_profile">Email: {{user.email}}</p>
+      <p class="texto_profile">Rol: {{user.rol}}</p>
+    </div>
+  </div>
+</main>
+
+<footer></footer>
+
+<script src="/assets/js/logout.js"></script>
