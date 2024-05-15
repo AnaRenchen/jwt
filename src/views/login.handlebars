@@ -53,3 +53,22 @@
 
 <footer></footer>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const params = new URLSearchParams(window.location.search);
+  const message = params.get('message');
+  
+  if (message) {
+    Swal.fire({
+        imageUrl: "https://i.postimg.cc/ZqrV8yL4/cat.png",
+        background: "white",
+        text: message,
+        confirmButtonText: '¡Got it!',
+        confirmButtonColor: "black",
+    });
+  }
+});
+</script>
+

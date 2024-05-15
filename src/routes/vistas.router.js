@@ -10,12 +10,19 @@ const cartsMongo = new CartsManagerMongo();
 
 router3.get("/home", async (req, res) => {
   try {
-    let cartId = "663a9a3d9002c4c009f36832";
-
+    let cartId = null;
+    if (req.session.user) {
+      cartId = req.session.user.cart ? req.session.user.cart._id : null;
+    }
     let { docs: products } = await managerMongo.getProductsPaginate();
 
     res.setHeader("Content-Type", "text/html");
-    res.status(200).render("home", { products, cartId, titulo: "Horisada" });
+    res.status(200).render("home", {
+      products,
+      titulo: "Horisada",
+      login: req.session.user,
+      cartId,
+    });
   } catch (error) {
     console.log(error);
     res.setHeader("Content-Type", "text/html");
@@ -25,6 +32,11 @@ router3.get("/home", async (req, res) => {
 
 router3.get("/realtimeproducts", auth, async (req, res) => {
   try {
+    let cartId = null;
+    if (req.session.user) {
+      cartId = req.session.user.cart ? req.session.user.cart._id : null;
+    }
+
     let limit = req.query.limit || 10;
     let page = req.query.page || 1;
     let sort = req.query.sort;
@@ -72,6 +84,7 @@ router3.get("/realtimeproducts", auth, async (req, res) => {
       : null;
 
     res.render("realtimeproducts", {
+      cartId,
       status: "success",
       products: result.docs,
       totalPages: result.totalPages,
@@ -82,6 +95,7 @@ router3.get("/realtimeproducts", auth, async (req, res) => {
       hasNextPage: hasNextPage,
       prevLink: prevLink,
       nextLink: nextLink,
+      login: req.session.user,
     });
   } catch (error) {
     console.log(error);
@@ -91,11 +105,15 @@ router3.get("/realtimeproducts", auth, async (req, res) => {
 
 router3.get("/products", async (req, res) => {
   try {
-    let cartId = "663a9a3d9002c4c009f36832";
+    let cartId = null;
+    if (req.session.user) {
+      cartId = req.session.user.cart ? req.session.user.cart._id : null;
+    }
 
     let limit = req.query.limit || 10;
     let page = req.query.page || 1;
     let sort = req.query.sort;
+    let message = req.query;
 
     const filter = {};
     const validCategories = [
@@ -165,6 +183,8 @@ router3.get("/products", async (req, res) => {
       loginSuccess: loginSuccess,
       userName: userName,
       isAdmin: isAdmin,
+      login: req.session.user,
+      message,
     });
   } catch (error) {
     console.log(error);
@@ -174,8 +194,13 @@ router3.get("/products", async (req, res) => {
 
 router3.get("/chat", async (req, res) => {
   try {
+    let cartId = null;
+    if (req.session.user) {
+      cartId = req.session.user.cart ? req.session.user.cart._id : null;
+    }
+
     res.setHeader("Content-Type", "text/html");
-    res.status(200).render("chat");
+    res.status(200).render("chat", { cartId, login: req.session.user });
   } catch (error) {
     console.log(error);
     res.setHeader("Content-Type", "text/html");
@@ -192,29 +217,39 @@ router3.get("/carts/:cid", auth, async (req, res) => {
       res.status(404).send("Cart not found");
       return;
     }
-    res.status(200).render("carts", { cart });
+    res.status(200).render("carts", { cart, login: req.session.user });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");
   }
 });
 
-router3.get("/register", async (req, res) => {
-  try {
-    let { error } = req.query;
-
-    res.status(200).render("register", { error });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal server error");
+router3.get(
+  "/register",
+  (req, res, next) => {
+    if (req.session.user) {
+      return res.redirect("/profile");
+    }
+    next();
+  },
+  (req, res) => {
+    try {
+      let { error } = req.query;
+      res.status(200).render("register", { error, login: req.session.user });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal server error");
+    }
   }
-});
+);
 
 router3.get("/login", async (req, res) => {
   try {
-    let { error } = req.query;
+    let { error, message } = req.query;
 
-    res.status(200).render("login", { error });
+    res
+      .status(200)
+      .render("login", { error, message, login: req.session.user });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");
@@ -223,9 +258,15 @@ router3.get("/login", async (req, res) => {
 
 router3.get("/profile", auth, async (req, res) => {
   try {
-    let cartId = "663a9a3d9002c4c009f36832";
-
-    res.status(200).render("profile", { user: req.session.user, cartId });
+    let cartId = null;
+    if (req.session.user) {
+      cartId = req.session.user.cart ? req.session.user.cart._id : null;
+    }
+    res.status(200).render("profile", {
+      user: req.session.user,
+      login: req.session.user,
+      cartId,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");

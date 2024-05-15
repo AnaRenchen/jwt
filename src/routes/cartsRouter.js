@@ -2,6 +2,7 @@ import { Router } from "express";
 import CartsManagerMongo from "../dao/cartsmanagerMongo.js";
 import ProductManagerMongo from "../dao/productmanagerMongo.js";
 import { isValidObjectId } from "mongoose";
+import { authPost } from "../middleware/authPost.js";
 export const router2 = Router();
 
 const cartsMongo = new CartsManagerMongo();
@@ -11,7 +12,7 @@ router2.post("/", async (req, res) => {
   try {
     let newCart = await cartsMongo.createCart();
     res.setHeader("Content-Type", "application/json");
-    return res.status(200).json(newCart);
+    return res.status(200).json({ message: "Cart created.", newCart });
   } catch (error) {
     console.log(error);
     res.setHeader("Content-Type", "application/json");
@@ -45,7 +46,7 @@ router2.get("/:cid", async (req, res) => {
   }
 });
 
-router2.post("/:cid/product/:pid", async (req, res) => {
+router2.post("/:cid/product/:pid", authPost, async (req, res) => {
   try {
     let { cid, pid } = req.params;
     if (!isValidObjectId(cid) || !isValidObjectId(pid)) {

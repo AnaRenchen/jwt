@@ -15,15 +15,6 @@
   {{>menu}}
 </header>
 
- {{#if loginSuccess}}
-  <div class="welcome-message">
-    {{#if isAdmin}}
-      <p>Welcome, Admin! <i class="far fa-smile"></i></p>
-    {{else}}
-      <p>Welcome, {{userName}}! <i class="far fa-smile"></i></p>
-    {{/if}}
-  </div>
-{{/if}}
 
   <h1 class="titulo"> Horisada´s Paintings </h1>
 
@@ -33,11 +24,11 @@
 
 <main>
 
-  <h2 class="subtitulo"> Products Data </h2>
+ 
 
   <div class="pagination">
     <ul>
-      <li><a href="/products?page=1">Catalog</a></li>
+      <li><a href="/products?page=1" class="our_products">Our Products</a></li>
       {{#if hasPrevPage}}
         <li><a href="/products?page={{prevPage}}">Previous</a></li>
       {{/if}}
@@ -84,3 +75,22 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/assets/js/products.js"></script>
 <script src="/assets/js/logout.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const params = new URLSearchParams(window.location.search);
+  const message = params.get('message');
+  
+  if (message) {
+    Swal.fire({
+        imageUrl: "https://i.postimg.cc/BnyqP2s9/icons8-geisha-64-1.png",
+        background: "white",
+        text: message,
+        confirmButtonColor: "black",
+        confirmButtonText: ":)",
+        timer: 5000,
+        toast:true,
+    });
+  }
+});
+</script>

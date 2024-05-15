@@ -1,4 +1,5 @@
 import express from "express";
+import MongoStore from "connect-mongo";
 import { Server } from "socket.io";
 import { engine } from "express-handlebars";
 import { router as productsRouter } from "./routes/productsRouter.js";
@@ -21,6 +22,12 @@ app.use(
     secret: "AnaRenchen123",
     resave: true,
     saveUninitialized: true,
+    store: MongoStore.create({
+      ttl: 3600,
+      mongoUrl:
+        "mongodb+srv://anamagbh:BackendCoder@cluster0.b6qhfhh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+      dbName: "ecommerce",
+    }),
   })
 );
 

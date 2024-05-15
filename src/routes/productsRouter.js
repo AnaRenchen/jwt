@@ -2,6 +2,7 @@ import { Router } from "express";
 import ProductManagerMongo from "../dao/productmanagerMongo.js";
 import { io } from "../app.js";
 import { isValidObjectId } from "mongoose";
+import { authPost } from "../middleware/authPost.js";
 
 export const router = Router();
 
@@ -103,7 +104,7 @@ router.get("/:pid", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", authPost, async (req, res) => {
   try {
     let {
       title,

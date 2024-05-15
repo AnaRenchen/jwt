@@ -278,7 +278,7 @@ footer{
         padding: 5px 10px;
         color: #242220;
         font-family: 'Times New Roman', Times, serif;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         letter-spacing: 0.8; 
       }
       
@@ -479,7 +479,7 @@ footer{
 
   .button-container_register {
     text-align: center; 
-    margin-bottom: 50px;
+    margin-bottom: 20px;
   }
   
   .button_form {
@@ -517,7 +517,6 @@ footer{
   }
 
   .welcome_profile {
-    
     margin-top: 50px;
     margin-bottom: 50px;
     text-align: center;

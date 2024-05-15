@@ -16,7 +16,8 @@ export default class ProductManagerMongo {
   }
 
   async addProduct(product) {
-    return await productsModel.create(product);
+    let newProduct = await productsModel.create(product);
+    return newProduct.toJSON();
   }
 
   async getProductbyId(id) {

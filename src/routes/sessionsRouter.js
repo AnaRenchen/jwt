@@ -1,10 +1,12 @@
 import { Router } from "express";
+import CartsManagerMongo from "../dao/cartsmanagerMongo.js";
 import { usersManagerMongo as UsersManager } from "../dao/usersmanager.js";
 import { generateHash } from "../utils.js";
 
 export const router4 = Router();
 
 const usersManager = new UsersManager();
+const cartsMongo = new CartsManagerMongo();
 
 router4.post("/register", async (req, res) => {
   try {
@@ -37,18 +39,23 @@ router4.post("/register", async (req, res) => {
 
     password = generateHash(password);
 
+    let newCart = await cartsMongo.createCart();
     let newUser = await usersManager.create({
       name,
       email,
       password,
       rol: "user",
+      cart: newCart._id,
     });
-
-    res.setHeader("Content-Type", "application/json");
-    res.status(200).json({
-      message: "Registration successful!",
-      name: newUser.name,
-    });
+    if (web) {
+      return res.redirect(`/login?message=Registration sucessful, ${name}!`);
+    } else {
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json({
+        message: "Registration successful!",
+        name: newUser.name,
+      });
+    }
   } catch (error) {
     console.log(error);
     res.setHeader("Content-Type", "application/json");
@@ -71,7 +78,7 @@ router4.post("/login", async (req, res) => {
       }
     }
 
-    let user = await usersManager.getBy({
+    let user = await usersManager.getByPopulate({
       email,
       password: generateHash(password),
     });
@@ -98,7 +105,9 @@ router4.post("/login", async (req, res) => {
     req.session.user = user;
 
     if (web) {
-      return res.status(302).redirect("/products?loginSuccess=true");
+      return res.redirect(
+        `/products?message=Welcome, ${user.name}! rol:${user.rol}`
+      );
     } else {
       res.setHeader("Content-Type", "application/json");
       return res

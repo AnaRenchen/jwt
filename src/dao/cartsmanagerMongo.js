@@ -9,7 +9,8 @@ export default class CartsManagerMongo {
   }
 
   async createCart(product) {
-    return await cartsModel.create(product);
+    let newCart = await cartsModel.create(product);
+    return newCart.toJSON();
   }
 
   async getCartbyId(id, useLean = false) {
