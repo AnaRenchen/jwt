@@ -159,15 +159,6 @@ router3.get("/products", async (req, res) => {
 
     const loginSuccess = req.query.loginSuccess === "true";
 
-    let userName = "";
-    let isAdmin = false;
-    if (req.session.user) {
-      userName = req.session.user.name;
-    }
-    if (req.session.user && req.session.user.email === "adminCoder@coder.com") {
-      isAdmin = true;
-    }
-
     res.render("products", {
       status: "success",
       products: result.docs,
@@ -181,8 +172,6 @@ router3.get("/products", async (req, res) => {
       nextLink: nextLink,
       cartId,
       loginSuccess: loginSuccess,
-      userName: userName,
-      isAdmin: isAdmin,
       login: req.session.user,
       message,
     });
