@@ -1,13 +1,6 @@
 <header>
   <div class="up_page">
-    <a href="/home">
-      <img class="logo" src="https://i.postimg.cc/JzVpc1S5/logo-header.png" alt="logo" width="80" />
-    </a>
-   
-    <div class="cart_menu_container">
-      <a href="/carts/{{cartId}}">
-        <img class="cart_icon" src="https://i.postimg.cc/rF4ScZMk/icons8-cart-48.png" alt="" />
-      </a>
+     {{>header}}
       
       <div class="menu2">
         {{>menu2}}
@@ -27,22 +20,22 @@
 
   <div class="pagination">
     <ul>
-      <li><a href="/products?page=1">Catalog</a></li>
+      <li><a href="/realtimeproducts?page=1">Catalog</a></li>
       {{#if hasPrevPage}}
-        <li><a href="/products?page={{prevPage}}">Previous</a></li>
+         <li><a href="{{prevLink}}">Previous</a></li>
       {{/if}}
       {{#if hasNextPage}}
         &nbsp;
-        {{currentpage}}
+        {{currentPage}}
         /
         {{totalPages}}
         &nbsp;
       {{/if}}
       {{#if hasNextPage}}
-        <li><a href="/products?page={{nextPage}}">Next</a></li>
+       <li><a href="{{nextLink}}">Next</a></li>
       {{/if}}
       {{#if nextPage}}
-        <li><a href="/products?page={{totalPages}}">View Last in Catalog</a></li>
+        <li><a href="/realtimeproducts?page={{totalPages}}">View Last in Catalog</a></li>
       {{/if}}
     </ul>
   </div>

@@ -76,12 +76,24 @@ router3.get("/realtimeproducts", auth, async (req, res) => {
     const hasNextPage = result.nextPage !== null;
     const hasPrevPage = result.prevPage !== null;
 
+    const prevParams = new URLSearchParams({
+      ...req.query,
+      page: result.prevPage,
+      totalPages: result.totalPages,
+    });
     const prevLink = hasPrevPage
-      ? `/products?page=${result.prevPage}&limit=${limit}`
+      ? `/realtimeproducts?${prevParams.toString()}`
       : null;
+
+    const nextParams = new URLSearchParams({
+      ...req.query,
+      page: result.nextPage,
+      totalPages: result.totalPages,
+    });
     const nextLink = hasNextPage
-      ? `/products?page=${result.nextPage}&limit=${limit}`
+      ? `/realtimeproducts?${nextParams.toString()}`
       : null;
+    const currentPage = page;
 
     res.render("realtimeproducts", {
       cartId,
@@ -95,6 +107,7 @@ router3.get("/realtimeproducts", auth, async (req, res) => {
       hasNextPage: hasNextPage,
       prevLink: prevLink,
       nextLink: nextLink,
+      currentPage,
       login: req.session.user,
     });
   } catch (error) {
@@ -150,14 +163,20 @@ router3.get("/products", async (req, res) => {
     const hasNextPage = result.nextPage !== null;
     const hasPrevPage = result.prevPage !== null;
 
-    const prevLink = hasPrevPage
-      ? `/products?page=${result.prevPage}&limit=${limit}`
-      : null;
-    const nextLink = hasNextPage
-      ? `/products?page=${result.nextPage}&limit=${limit}`
-      : null;
+    const prevParams = new URLSearchParams({
+      ...req.query,
+      page: result.prevPage,
+      totalPages: result.totalPages,
+    });
+    const prevLink = hasPrevPage ? `/products?${prevParams.toString()}` : null;
 
-    const loginSuccess = req.query.loginSuccess === "true";
+    const nextParams = new URLSearchParams({
+      ...req.query,
+      page: result.nextPage,
+      totalPages: result.totalPages,
+    });
+    const nextLink = hasNextPage ? `/products?${nextParams.toString()}` : null;
+    const currentPage = page;
 
     res.render("products", {
       status: "success",
@@ -170,8 +189,8 @@ router3.get("/products", async (req, res) => {
       hasNextPage: hasNextPage,
       prevLink: prevLink,
       nextLink: nextLink,
+      currentPage,
       cartId,
-      loginSuccess: loginSuccess,
       login: req.session.user,
       message,
     });
