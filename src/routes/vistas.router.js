@@ -10,10 +10,13 @@ const cartsMongo = new CartsManagerMongo();
 
 router3.get("/home", async (req, res) => {
   try {
-    let cartId = null;
+    let cart = null;
     if (req.session.user) {
-      cartId = req.session.user.cart ? req.session.user.cart._id : null;
+      cart = {
+        _id: req.session.user.cart._id,
+      };
     }
+
     let { docs: products } = await managerMongo.getProductsPaginate();
 
     res.setHeader("Content-Type", "text/html");
@@ -21,7 +24,7 @@ router3.get("/home", async (req, res) => {
       products,
       titulo: "Horisada",
       login: req.session.user,
-      cartId,
+      cart,
     });
   } catch (error) {
     console.log(error);
@@ -32,9 +35,11 @@ router3.get("/home", async (req, res) => {
 
 router3.get("/realtimeproducts", auth, async (req, res) => {
   try {
-    let cartId = null;
+    let cart = null;
     if (req.session.user) {
-      cartId = req.session.user.cart ? req.session.user.cart._id : null;
+      cart = {
+        _id: req.session.user.cart._id,
+      };
     }
 
     let limit = req.query.limit || 10;
@@ -96,7 +101,7 @@ router3.get("/realtimeproducts", auth, async (req, res) => {
     const currentPage = page;
 
     res.render("realtimeproducts", {
-      cartId,
+      cart,
       status: "success",
       products: result.docs,
       totalPages: result.totalPages,
@@ -118,15 +123,16 @@ router3.get("/realtimeproducts", auth, async (req, res) => {
 
 router3.get("/products", async (req, res) => {
   try {
-    let cartId = null;
+    let cart = null;
     if (req.session.user) {
-      cartId = req.session.user.cart ? req.session.user.cart._id : null;
+      cart = {
+        _id: req.session.user.cart._id,
+      };
     }
 
     let limit = req.query.limit || 10;
     let page = req.query.page || 1;
     let sort = req.query.sort;
-    let message = req.query;
 
     const filter = {};
     const validCategories = [
@@ -190,9 +196,8 @@ router3.get("/products", async (req, res) => {
       prevLink: prevLink,
       nextLink: nextLink,
       currentPage,
-      cartId,
+      cart,
       login: req.session.user,
-      message,
     });
   } catch (error) {
     console.log(error);
@@ -202,13 +207,15 @@ router3.get("/products", async (req, res) => {
 
 router3.get("/chat", async (req, res) => {
   try {
-    let cartId = null;
+    let cart = null;
     if (req.session.user) {
-      cartId = req.session.user.cart ? req.session.user.cart._id : null;
+      cart = {
+        _id: req.session.user.cart._id,
+      };
     }
 
     res.setHeader("Content-Type", "text/html");
-    res.status(200).render("chat", { cartId, login: req.session.user });
+    res.status(200).render("chat", { cart, login: req.session.user });
   } catch (error) {
     console.log(error);
     res.setHeader("Content-Type", "text/html");
@@ -253,11 +260,9 @@ router3.get(
 
 router3.get("/login", async (req, res) => {
   try {
-    let { error, message } = req.query;
+    let { error } = req.query;
 
-    res
-      .status(200)
-      .render("login", { error, message, login: req.session.user });
+    res.status(200).render("login", { error, login: req.session.user });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");
@@ -266,14 +271,17 @@ router3.get("/login", async (req, res) => {
 
 router3.get("/profile", auth, async (req, res) => {
   try {
-    let cartId = null;
+    let cart = null;
     if (req.session.user) {
-      cartId = req.session.user.cart ? req.session.user.cart._id : null;
+      cart = {
+        _id: req.session.user.cart._id,
+      };
     }
+
     res.status(200).render("profile", {
       user: req.session.user,
       login: req.session.user,
-      cartId,
+      cart,
     });
   } catch (error) {
     console.error(error);

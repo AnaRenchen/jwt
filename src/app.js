@@ -11,6 +11,8 @@ import path from "path";
 import mongoose from "mongoose";
 import { messagesModel } from "./dao/models/messagesModel.js";
 import sessions from "express-session";
+import passport from "passport";
+import { initPassport } from "./config/passport.config.js";
 
 const PORT = 3000;
 const app = express();
@@ -30,6 +32,10 @@ app.use(
     }),
   })
 );
+
+initPassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.engine("handlebars", engine());
 app.set("views", path.join(__dirname, "views"));

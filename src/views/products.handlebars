@@ -9,6 +9,7 @@
   {{>menu}}
 </header>
 
+   <div id="messageContainer"></div>
 
   <h1 class="titulo"> Horisada´s Paintings </h1>
 
@@ -17,8 +18,6 @@
 </header>
 
 <main>
-
- 
 
   <div class="pagination">
   <ul>
@@ -43,7 +42,8 @@
 </div>
 
 
-    <input type="text" value="{{cartId}}" hidden id="cartId" />
+    <input type="text" value="{{cart._id}}" hidden id="cartId" />
+
 
   <div class="table_container">
     {{#each products}}
@@ -72,20 +72,16 @@
 <script src="/assets/js/logout.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const params = new URLSearchParams(window.location.search);
-  const message = params.get('message');
-  
-  if (message) {
-    Swal.fire({
-        imageUrl: "https://i.postimg.cc/BnyqP2s9/icons8-geisha-64-1.png",
-        background: "white",
-        text: message,
-        confirmButtonColor: "black",
-        confirmButtonText: ":)",
-        timer: 5000,
-        toast:true,
-    });
-  }
-});
+  document.addEventListener('DOMContentLoaded', function() {
+    const params = new URLSearchParams(window.location.search);
+    const message = params.get('message');
+
+    if (message) {
+      const messageContainer = document.getElementById('messageContainer');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'welcome_message';
+      messageDiv.innerText = message;
+      messageContainer.appendChild(messageDiv);
+    }
+  });
 </script>
