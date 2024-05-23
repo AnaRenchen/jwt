@@ -13,8 +13,9 @@ router4.get(
   (req, res) => {
     req.session.user = req.user;
 
-    res.setHeader("Content-Type", "application/json");
-    return res.status(200).json({ payload: req.user });
+    return res.redirect(
+      `/products?message=Welcome, ${req.user.name}, rol: ${req.user.rol}!`
+    );
   }
 );
 
@@ -82,7 +83,6 @@ router4.get("/logout", async (req, res) => {
   try {
     req.session.destroy((e) => {
       if (e) {
-        console.log(error);
         res.setHeader("Content-Type", "application/json");
         return res.status(500).json({
           error: `Unexpected error.`,
@@ -93,7 +93,6 @@ router4.get("/logout", async (req, res) => {
     res.setHeader("Content-Type", "application/json");
     return res.status(200).json({ payload: "Logout successful." });
   } catch (error) {
-    console.log(error);
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
       error: `Unexpected error.`,

@@ -286,39 +286,59 @@ footer{
         background-color: #f9d0d9;
       }
 
-      
+      .main_cart{
+        min-height: 50vh;
+      }
+       
       .product_detail {
         margin: 100px;
-        width:60%;
+        width: 60%;
+        
       }
       
       .product_detail .cart {
-        display: flex; 
-        flex-direction: row; 
-        width: 60%; 
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        width: 60%;
       }
       
       .product_detail .cart .image_cart {
-        width: 40%; 
+        width: 40%;
         height: auto;
         object-fit: cover;
       }
       
       .product_detail .cart .cart-body {
+        display: flex;
+        flex-direction: column;
         width: 100%; 
         color: #242220;
         font-family: "Times New Roman", Times, serif;
         font-size: 1.2rem;
         letter-spacing: 0.05em;
-        text-align:left;
-        margin-left: 100px;
+        text-align: left;
+        margin-left: 40px;
       }
       
       .product_detail .cart .cart-body p {
         margin-bottom: 10px;
       }
-
-      .cart_main{
+      
+      .product_detail .cart .trash_item {
+        background: none;
+        border: none;
+        cursor: pointer;
+        margin-bottom: 90px;
+        margin-right: 50px;
+      }
+      
+      .product_detail .cart .custom-icon {
+        font-size: 1.5em;
+        border: none;
+      }
+      
+      .cart_main {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
@@ -327,18 +347,18 @@ footer{
         margin-bottom: 20px;
         margin: 70px;
         font-size: 2rem;
-        color:#242220;
+        color: #242220;
         font-weight: lighter;
         letter-spacing: 0.05em;
       }
-
-      .cart_title{
+      
+      .cart_title {
         font-family: 'Times New Roman', Times, serif;
         font-size: 1.2rem;
         margin-bottom: 20px;
-        color:#242220;
+        color: #242220;
       }
-
+    
 
       .subtitle_hotproducts{
         display: flex;
@@ -614,3 +634,9 @@ footer{
   .error_message:hover {
     background-color: #ffd6d6; /* Cambio de color al pasar el ratón */
   }
+
+  .custom-icon {
+    font-size: 1.5em;
+    background-color: white;
+}
+

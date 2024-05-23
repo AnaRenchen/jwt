@@ -15,24 +15,29 @@
   {{>menu}}
   </header>
 
-  <h2 class="cart_main" id="cart" data-cid="{{cartId}}">Cart</h2>
+ <h2 class="cart_main">Cart</h2>
+ <input type="text" value="{{cart._id}}" hidden id="cartId" />
 
+<main class="main_cart">
 {{#each cart.products}}
 <div class="product_detail">
   <div class="cart">
     <img src="{{product.thumbnail}}" class="image_cart" alt="{{product.title}}" />
     <div class="cart-body">
-      <h3 class="cart_title"> {{product.title}}</h3>
+      <h3 class="cart_title">{{product.title}}</h3>
       <p>Price: ${{product.price}}</p>
       <p>Quantity: {{quantity}}</p>
     </div>
+    <button class="trash_item" onclick="removeFromCart('{{product._id}}')">
+      <i class="fas fa-trash custom-icon"></i>
+    </button>
   </div>
 </div>
-    {{/each}}
-      </div>
-    </div>
-    </main>
+{{/each}}
+</main>
 
 <footer></footer>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/assets/js/logout.js"></script>
+<script src="/assets/js/cart.js"></script>
