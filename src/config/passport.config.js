@@ -1,13 +1,24 @@
 import passport from "passport";
 import local from "passport-local";
+import passportJWT from "passport-jwt";
 import { usersManagerMongo as UsersManager } from "../dao/usersmanager.js";
-import { generateHash } from "../utils.js";
+import { SECRET, generateHash } from "../utils.js";
 import CartsManagerMongo from "../dao/cartsmanagerMongo.js";
 import { validatePassword } from "../utils.js";
 import github from "passport-github2";
 
 const usersManager = new UsersManager();
 const cartsMongo = new CartsManagerMongo();
+
+const buscaToken = (req) => {
+  let token = null;
+
+  if (req.cookies["anarenchencookie"]) {
+    token = req.cookies["anarenchencookie"];
+  }
+
+  return token;
+};
 
 export const initPassport = () => {
   passport.use(
@@ -109,12 +120,20 @@ export const initPassport = () => {
     )
   );
 
-  passport.serializeUser((user, done) => {
-    return done(null, user._id);
-  });
-
-  passport.deserializeUser(async (id, done) => {
-    let user = await usersManager.getBy({ _id: id });
-    return done(null, user);
-  });
+  passport.use(
+    "jwt",
+    new passportJWT.Strategy(
+      {
+        secretOrKey: SECRET,
+        jwtFromRequest: new passportJWT.ExtractJwt.fromExtractors([buscaToken]),
+      },
+      async (contenidoToken, done) => {
+        try {
+          return done(null, contenidoToken);
+        } catch (error) {
+          return done(error);
+        }
+      }
+    )
+  );
 };

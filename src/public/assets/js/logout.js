@@ -1,4 +1,12 @@
 const logout = async () => {
-  await fetch("http://localhost:3000/api/sessions/logout", { method: "get" });
-  window.location.href = "/login";
+  try {
+    const response = await fetch("/api/sessions/logout", { method: "GET" });
+    if (response.ok) {
+      window.location.href = "/login";
+    } else {
+      console.error("Logout failed.");
+    }
+  } catch (error) {
+    console.error("Error during logout:", error);
+  }
 };

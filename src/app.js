@@ -1,5 +1,5 @@
 import express from "express";
-import MongoStore from "connect-mongo";
+import cookieParser from "cookie-parser";
 import { Server } from "socket.io";
 import { engine } from "express-handlebars";
 import { router as productsRouter } from "./routes/productsRouter.js";
@@ -10,33 +10,18 @@ import __dirname from "./utils.js";
 import path from "path";
 import mongoose from "mongoose";
 import { messagesModel } from "./dao/models/messagesModel.js";
-import sessions from "express-session";
 import passport from "passport";
 import { initPassport } from "./config/passport.config.js";
-import jwt from "jsonwebtoken";
 
 const PORT = 3000;
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(
-  sessions({
-    secret: "AnaRenchen123",
-    resave: true,
-    saveUninitialized: true,
-    store: MongoStore.create({
-      ttl: 3600,
-      mongoUrl:
-        "mongodb+srv://anamagbh:BackendCoder@cluster0.b6qhfhh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-      dbName: "ecommerce",
-    }),
-  })
-);
+app.use(cookieParser());
 
 initPassport();
 app.use(passport.initialize());
-app.use(passport.session());
 
 app.engine("handlebars", engine());
 app.set("views", path.join(__dirname, "views"));

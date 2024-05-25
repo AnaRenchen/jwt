@@ -1,6 +1,7 @@
 export const auth = (req, res, next) => {
-  if (!req.session.user) {
-    return res.status(500).redirect("/login");
+  if (req.user) {
+    return next();
   }
-  next();
+
+  res.redirect("/login");
 };

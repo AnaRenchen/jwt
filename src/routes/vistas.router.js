@@ -1,7 +1,7 @@
 import { Router } from "express";
 import ProductManagerMongo from "../dao/productmanagerMongo.js";
 import CartsManagerMongo from "../dao/cartsmanagerMongo.js";
-import { auth } from "../middleware/auth.js";
+import passport from "passport";
 
 export const router3 = Router();
 
@@ -11,9 +11,9 @@ const cartsMongo = new CartsManagerMongo();
 router3.get("/home", async (req, res) => {
   try {
     let cart = null;
-    if (req.session.user) {
+    if (req.user) {
       cart = {
-        _id: req.session.user.cart._id,
+        _id: req.user.cart._id,
       };
     }
 
@@ -23,7 +23,7 @@ router3.get("/home", async (req, res) => {
     res.status(200).render("home", {
       products,
       titulo: "Horisada",
-      login: req.session.user,
+      login: req.user,
       cart,
     });
   } catch (error) {
@@ -33,12 +33,12 @@ router3.get("/home", async (req, res) => {
   }
 });
 
-router3.get("/realtimeproducts", auth, async (req, res) => {
+router3.get("/realtimeproducts", async (req, res) => {
   try {
     let cart = null;
-    if (req.session.user) {
+    if (req.user) {
       cart = {
-        _id: req.session.user.cart._id,
+        _id: req.user.cart._id,
       };
     }
 
@@ -113,7 +113,7 @@ router3.get("/realtimeproducts", auth, async (req, res) => {
       prevLink: prevLink,
       nextLink: nextLink,
       currentPage,
-      login: req.session.user,
+      login: req.user,
     });
   } catch (error) {
     console.log(error);
@@ -124,9 +124,9 @@ router3.get("/realtimeproducts", auth, async (req, res) => {
 router3.get("/products", async (req, res) => {
   try {
     let cart = null;
-    if (req.session.user) {
+    if (req.user) {
       cart = {
-        _id: req.session.user.cart._id,
+        _id: req.user.cart._id,
       };
     }
 
@@ -197,7 +197,7 @@ router3.get("/products", async (req, res) => {
       nextLink: nextLink,
       currentPage,
       cart,
-      login: req.session.user,
+      login: req.user,
     });
   } catch (error) {
     console.log(error);
@@ -208,14 +208,14 @@ router3.get("/products", async (req, res) => {
 router3.get("/chat", async (req, res) => {
   try {
     let cart = null;
-    if (req.session.user) {
+    if (req.user) {
       cart = {
-        _id: req.session.user.cart._id,
+        _id: req.user.cart._id,
       };
     }
 
     res.setHeader("Content-Type", "text/html");
-    res.status(200).render("chat", { cart, login: req.session.user });
+    res.status(200).render("chat", { cart, login: req.user });
   } catch (error) {
     console.log(error);
     res.setHeader("Content-Type", "text/html");
@@ -223,26 +223,30 @@ router3.get("/chat", async (req, res) => {
   }
 });
 
-router3.get("/carts/:cid", auth, async (req, res) => {
-  try {
-    const cid = req.params.cid;
-    const cart = await cartsMongo.getCartbyId({ _id: cid }, true);
+router3.get(
+  "/carts/:cid",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const cid = req.params.cid;
+      const cart = await cartsMongo.getCartbyId({ _id: cid }, true);
 
-    if (!cart) {
-      res.status(404).send("Cart not found");
-      return;
+      if (!cart) {
+        res.status(404).send("Cart not found");
+        return;
+      }
+      res.status(200).render("carts", { cart, login: req.user });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal server error");
     }
-    res.status(200).render("carts", { cart, login: req.session.user });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal server error");
   }
-});
+);
 
 router3.get(
   "/register",
   (req, res, next) => {
-    if (req.session.user) {
+    if (req.user) {
       return res.redirect("/profile");
     }
     next();
@@ -250,7 +254,7 @@ router3.get(
   (req, res) => {
     try {
       let { error } = req.query;
-      res.status(200).render("register", { error, login: req.session.user });
+      res.status(200).render("register", { error, login: req.user });
     } catch (error) {
       console.error(error);
       res.status(500).send("Internal server error");
@@ -262,29 +266,33 @@ router3.get("/login", async (req, res) => {
   try {
     let { error } = req.query;
 
-    res.status(200).render("login", { error, login: req.session.user });
+    res.status(200).render("login", { error, login: req.user });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");
   }
 });
 
-router3.get("/profile", auth, async (req, res) => {
-  try {
-    let cart = null;
-    if (req.session.user) {
-      cart = {
-        _id: req.session.user.cart._id,
-      };
+router3.get(
+  "/profile",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      let cart = null;
+      if (req.user) {
+        cart = {
+          _id: req.user.cart._id,
+        };
+      }
+
+      res.status(200).render("profile", {
+        user: req.user,
+        login: req.user,
+        cart,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal server error");
     }
-
-    res.status(200).render("profile", {
-      user: req.session.user,
-      login: req.session.user,
-      cart,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal server error");
   }
-});
+);

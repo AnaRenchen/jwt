@@ -1,5 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
+import jwt from "jsonwebtoken";
+import { SECRET } from "../utils.js";
 
 export const router4 = Router();
 
@@ -11,7 +13,7 @@ router4.get(
     failureRedirect: "/login?error=Failed to login, please try again.",
   }),
   (req, res) => {
-    req.session.user = req.user;
+    req.user = req.user;
 
     return res.redirect(
       `/products?message=Welcome, ${req.user.name}, rol: ${req.user.rol}!`
@@ -47,27 +49,24 @@ router4.post(
 
 router4.post(
   "/login",
-  passport.authenticate("login", {
-    failureRedirect: "/login?error=Failed to login, please try again.",
-  }),
+  passport.authenticate("login", { session: false }),
   async (req, res) => {
     try {
-      let { web } = req.body;
-
       let user = { ...req.user };
       delete user.password;
-      req.session.user = user;
 
-      if (web) {
-        return res.redirect(
-          `/products?message=Welcome, ${user.name}! rol:${user.rol}`
-        );
-      } else {
-        res.setHeader("Content-Type", "application/json");
-        return res
-          .status(200)
-          .json({ payload: "Login successful!", username: user.name });
-      }
+      let token = jwt.sign(user, SECRET, { expiresIn: "5h" });
+
+      res.cookie("anarenchencookie", token, { httpOnly: true });
+
+      res.setHeader("Content-Type", "application/json");
+      return res.status(200).json({
+        payload: "Login successful!",
+        userlogin: user,
+        username: user.name,
+        rol: user.rol,
+        token,
+      });
     } catch (error) {
       console.log(error);
       res.setHeader("Content-Type", "application/json");
@@ -79,24 +78,20 @@ router4.post(
   }
 );
 
-router4.get("/logout", async (req, res) => {
-  try {
-    req.session.destroy((e) => {
-      if (e) {
-        res.setHeader("Content-Type", "application/json");
-        return res.status(500).json({
-          error: `Unexpected error.`,
-          detalle: `${error.message}`,
-        });
-      }
-    });
+router4.get("/logout", (req, res) => {
+  res.clearCookie("anarenchencookie");
+  res.setHeader("Content-Type", "application/json");
+  return res.status(200).json({ payload: "Logout successful." });
+});
+
+router4.get(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
     res.setHeader("Content-Type", "application/json");
-    return res.status(200).json({ payload: "Logout successful." });
-  } catch (error) {
-    res.setHeader("Content-Type", "application/json");
-    return res.status(500).json({
-      error: `Unexpected error.`,
-      detalle: `${error.message}`,
+    res.status(200).json({
+      message: "Perfil usuario",
+      user: req.user,
     });
   }
-});
+);
