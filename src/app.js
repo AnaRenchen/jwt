@@ -13,6 +13,7 @@ import { messagesModel } from "./dao/models/messagesModel.js";
 import sessions from "express-session";
 import passport from "passport";
 import { initPassport } from "./config/passport.config.js";
+import jwt from "jsonwebtoken";
 
 const PORT = 3000;
 const app = express();
