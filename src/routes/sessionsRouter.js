@@ -5,15 +5,18 @@ import { SECRET } from "../utils.js";
 
 export const router4 = Router();
 
-router4.get("/github", passport.authenticate("github", {}), (req, res) => {});
+router4.get("/github", passport.authenticate("github", { session: false }));
 
 router4.get(
   "/callbackGithub",
   passport.authenticate("github", {
-    failureRedirect: "/login?error=Failed to login, please try again.",
+    session: false,
   }),
   (req, res) => {
-    req.user = req.user;
+    let user = { ...req.user };
+    let token = jwt.sign(user, SECRET, { expiresIn: "5h" });
+
+    res.cookie("anarenchencookie", token, { httpOnly: true });
 
     return res.redirect(
       `/products?message=Welcome, ${req.user.name}, rol: ${req.user.rol}!`
@@ -23,15 +26,15 @@ router4.get(
 
 router4.get("/error", (req, res) => {
   res.setHeader("Content-Type", "application/json");
-  return res.status(500).json({
-    error: `Unexpected error.`,
-    detail: `Failed to register.`,
+  return res.status(401).json({
+    error: `Invalid user or password. Please try again.`,
   });
 });
 
 router4.post(
   "/register",
   passport.authenticate("register", {
+    session: false,
     failureRedirect: "/register?error=Failed to register, please try again.",
   }),
   async (req, res) => {
@@ -49,7 +52,10 @@ router4.post(
 
 router4.post(
   "/login",
-  passport.authenticate("login", { session: false }),
+  passport.authenticate("login", {
+    session: false,
+    failureRedirect: "/api/sessions/error",
+  }),
   async (req, res) => {
     try {
       let user = { ...req.user };

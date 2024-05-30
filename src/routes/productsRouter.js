@@ -2,7 +2,7 @@ import { Router } from "express";
 import ProductManagerMongo from "../dao/productmanagerMongo.js";
 import { io } from "../app.js";
 import { isValidObjectId } from "mongoose";
-import { authPost } from "../middleware/authPost.js";
+import passport from "passport";
 
 export const router = Router();
 
@@ -104,73 +104,77 @@ router.get("/:pid", async (req, res) => {
   }
 });
 
-router.post("/", authPost, async (req, res) => {
-  try {
-    let {
-      title,
-      description,
-      category,
-      price,
-      status,
-      thumbnail,
-      code,
-      stock,
-    } = req.body;
-
-    let exists;
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
     try {
-      exists = await managerMongo.getProductBy({ code });
+      let {
+        title,
+        description,
+        category,
+        price,
+        status,
+        thumbnail,
+        code,
+        stock,
+      } = req.body;
+
+      let exists;
+      try {
+        exists = await managerMongo.getProductBy({ code });
+      } catch (error) {
+        res.setHeader("Content-Type", "application/json");
+        return res.status(500).json({ error: "Internal server error." });
+      }
+
+      if (exists) {
+        res.setHeader("Content-Type", "application/json");
+        return res
+          .status(400)
+          .json({ error: `Product with code ${code} already exists` });
+      }
+
+      if (
+        !title ||
+        !description ||
+        !category ||
+        !price ||
+        !status ||
+        !thumbnail ||
+        !code ||
+        !stock
+      ) {
+        res.setHeader("Content-Type", "application/json");
+        return res.status(400).json({
+          error: `All fields are required: title, description, category, price, status, thumbnail, code, stock.`,
+        });
+      }
+
+      let newProduct = await managerMongo.addProduct({
+        title,
+        description,
+        category,
+        price,
+        status,
+        thumbnail,
+        code,
+        stock,
+      });
+
+      let { docs: productsList } = await managerMongo.getProductsPaginate();
+      io.emit("newproduct", productsList);
+      console.log("added");
+
+      res.setHeader("Content-Type", "application/json");
+      return res.status(200).json({ message: "Product added.", newProduct });
     } catch (error) {
+      console.log(error);
       res.setHeader("Content-Type", "application/json");
       return res.status(500).json({ error: "Internal server error." });
     }
-
-    if (exists) {
-      res.setHeader("Content-Type", "application/json");
-      return res
-        .status(400)
-        .json({ error: `Product with code ${code} already exists` });
-    }
-
-    if (
-      !title ||
-      !description ||
-      !category ||
-      !price ||
-      !status ||
-      !thumbnail ||
-      !code ||
-      !stock
-    ) {
-      res.setHeader("Content-Type", "application/json");
-      return res.status(400).json({
-        error: `All fields are required: title, description, category, price, status, thumbnail, code, stock.`,
-      });
-    }
-
-    let newProduct = await managerMongo.addProduct({
-      title,
-      description,
-      category,
-      price,
-      status,
-      thumbnail,
-      code,
-      stock,
-    });
-
-    let { docs: productsList } = await managerMongo.getProductsPaginate();
-    io.emit("newproduct", productsList);
-    console.log("added");
-
-    res.setHeader("Content-Type", "application/json");
-    return res.status(200).json({ message: "Product added.", newProduct });
-  } catch (error) {
-    console.log(error);
-    res.setHeader("Content-Type", "application/json");
-    return res.status(500).json({ error: "Internal server error." });
   }
-});
+);
 
 router.put("/:pid", async (req, res) => {
   try {

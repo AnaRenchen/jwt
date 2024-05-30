@@ -70,12 +70,14 @@ export const initPassport = () => {
           let user = await usersManager.getByPopulate({ email: username });
 
           if (!user) {
-            return done(null, false);
+            return done(null, false, { message: "User not found" });
           }
 
           if (!validatePassword(password, user.password)) {
-            return done(null, false);
+            return done(null, false, { message: "Invalid password" });
           }
+
+          delete user.password;
 
           return done(null, user);
         } catch (error) {
@@ -89,8 +91,8 @@ export const initPassport = () => {
     "github",
     new github.Strategy(
       {
-        clientID: "en el mensaje de envio del desafio",
-        clientSecret: "en el mensaje de envio del desafio",
+        clientID: "Iv23li1dABCEI1Ck9Rx5",
+        clientSecret: "b051b245a3533ee004dd3af3861c5b278141f4f1",
         callbackURL: "http://localhost:3000/api/sessions/callbackGithub",
       },
       async (tokenAcceso, tokenRefresh, profile, done) => {

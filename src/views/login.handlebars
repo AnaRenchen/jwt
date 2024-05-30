@@ -2,7 +2,9 @@
   <div class="up_page">
      {{>header}}
       <div class="menu2">
-        {{>menu2}}
+        <nav class="navbar2">
+       {{>menu2}}
+      </nav>
       </div>
     </div>
   </div>
@@ -53,6 +55,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   const params = new URLSearchParams(window.location.search);
   const message = params.get('message');
+  const error = params.get('error');
   
   if (message) {
     Swal.fire({
@@ -63,5 +66,6 @@ document.addEventListener('DOMContentLoaded', function() {
         confirmButtonColor: "black",
     });
   }
+ 
 });
 </script>
