@@ -14,6 +14,7 @@ const login = async (e) => {
       text: "Please fill in all fields.",
       confirmButtonText: "OK",
       confirmButtonColor: "black",
+      toast: true,
     });
     return;
   }

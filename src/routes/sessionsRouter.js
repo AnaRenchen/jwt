@@ -13,14 +13,23 @@ router4.get(
     session: false,
   }),
   (req, res) => {
-    let user = { ...req.user };
+    let user = req.user;
     let token = jwt.sign(user, SECRET, { expiresIn: "5h" });
 
     res.cookie("anarenchencookie", token, { httpOnly: true });
 
-    return res.redirect(
-      `/products?message=Welcome, ${req.user.name}, rol: ${req.user.rol}!`
-    );
+    if (user) {
+      return res.redirect(
+        `/products?message=Welcome, ${req.user.name}, rol: ${req.user.rol}!`
+      );
+    } else {
+      return res.status(200).json({
+        status: "success",
+        message: "User authenticated with Github.",
+        token,
+        username: user.name,
+      });
+    }
   }
 );
 
@@ -68,7 +77,6 @@ router4.post(
       res.setHeader("Content-Type", "application/json");
       return res.status(200).json({
         payload: "Login successful!",
-        userlogin: user,
         username: user.name,
         rol: user.rol,
         token,
