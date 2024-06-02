@@ -37,7 +37,9 @@ export const initPassport = () => {
 
           let exist = await usersManager.getByPopulate({ email: username });
           if (exist) {
-            return done(null, false);
+            return done(null, false, {
+              message: `${username} is already registered `,
+            });
           }
 
           password = generateHash(password);
@@ -91,8 +93,8 @@ export const initPassport = () => {
     "github",
     new github.Strategy(
       {
-        clientID: "otro",
-        clientSecret: "otro",
+        clientID: "Iv23li1dABCEI1Ck9Rx5",
+        clientSecret: "b051b245a3533ee004dd3af3861c5b278141f4f1",
         callbackURL: "http://localhost:3000/api/sessions/callbackGithub",
       },
       async (tokenAcceso, tokenRefresh, profile, done) => {
@@ -100,7 +102,7 @@ export const initPassport = () => {
           let email = profile._json.email;
           let name = profile._json.name;
           if (!name || !email) {
-            return done(null, false);
+            return done(null, false, { message: "Name or email are missing" });
           }
 
           let newCart = await cartsMongo.createCart();
