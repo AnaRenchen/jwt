@@ -12,8 +12,9 @@ import mongoose from "mongoose";
 import { messagesModel } from "./dao/models/messagesModel.js";
 import passport from "passport";
 import { initPassport } from "./config/passport.config.js";
+import { config } from "./config/config.js";
 
-const PORT = 3000;
+const PORT = config.port;
 const app = express();
 
 app.use(express.json());

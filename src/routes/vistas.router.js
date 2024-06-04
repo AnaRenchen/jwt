@@ -227,13 +227,20 @@ router3.get("/chat", auth2, async (req, res) => {
 router3.get("/carts/:cid", auth2, async (req, res) => {
   try {
     const cid = req.params.cid;
-    const cart = await cartsMongo.getCartbyId({ _id: cid }, true);
+    let cart = null;
+
+    if (req.user) {
+      cart = await cartsMongo.getCartbyId({ _id: cid }, true);
+    }
 
     if (!cart) {
       res.status(404).send("Cart not found");
       return;
     }
-    res.status(200).render("carts", { cart, user: req.user });
+    res.status(200).render("carts", {
+      cart,
+      user: req.user,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");

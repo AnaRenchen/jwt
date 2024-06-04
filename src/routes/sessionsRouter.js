@@ -2,7 +2,7 @@ import { Router } from "express";
 import passport from "passport";
 import jwt from "jsonwebtoken";
 import { SECRET } from "../utils.js";
-import { passportCall } from "../config/passportCall.js";
+import { passportCall } from "../middleware/passportCall.js";
 
 export const router4 = Router();
 

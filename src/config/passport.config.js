@@ -6,6 +6,7 @@ import { SECRET, generateHash } from "../utils.js";
 import CartsManagerMongo from "../dao/cartsmanagerMongo.js";
 import { validatePassword } from "../utils.js";
 import github from "passport-github2";
+import { config } from "../config/config.js";
 
 const usersManager = new UsersManager();
 const cartsMongo = new CartsManagerMongo();
@@ -97,8 +98,8 @@ export const initPassport = () => {
     "github",
     new github.Strategy(
       {
-        clientID: "Iv23li1dABCEI1Ck9Rx5",
-        clientSecret: "b051b245a3533ee004dd3af3861c5b278141f4f1",
+        clientID: config.clientId,
+        clientSecret: config.clientSecret,
         callbackURL: "http://localhost:3000/api/sessions/callbackGithub",
       },
       async (tokenAcceso, tokenRefresh, profile, done) => {
