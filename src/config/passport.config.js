@@ -30,9 +30,11 @@ export const initPassport = () => {
       },
       async (req, username, password, done) => {
         try {
-          let { name } = req.body;
-          if (!name) {
-            return done(null, false);
+          let { name, last_name, age } = req.body;
+          if (!name || !last_name || !age) {
+            return done(null, false, {
+              message: "You must complete all fields.",
+            });
           }
 
           let exist = await usersManager.getByPopulate({ email: username });
@@ -47,9 +49,11 @@ export const initPassport = () => {
           let newCart = await cartsMongo.createCart();
           let newUser = await usersManager.create({
             name,
+            last_name,
             email: username,
             password,
-            rol: "user",
+            age,
+            role: "user",
             cart: newCart._id,
           });
 

@@ -9,22 +9,22 @@ export const router4 = Router();
 router4.get("/github", passport.authenticate("github", { session: false }));
 
 router4.get("/callbackGithub", passportCall("github"), (req, res) => {
-  let user = req.user;
-  let token = jwt.sign(user, SECRET, { expiresIn: "5h" });
+  let dataToken = {
+    name: req.user.name,
+    email: req.user.email,
+    rol: req.user.rol,
+    cart: req.user.cart,
+  };
+
+  let token = jwt.sign(dataToken, SECRET, { expiresIn: "5h" });
 
   res.cookie("anarenchencookie", token, { httpOnly: true });
 
-  if (user) {
+  if (dataToken) {
     return res.redirect(
       `/products?message=Welcome, ${req.user.name}, rol: ${req.user.rol}!`
     );
   }
-  return res.status(200).json({
-    status: "success",
-    message: "User authenticated with Github.",
-    token,
-    username: user.name,
-  });
 });
 
 router4.get("/error", (req, res) => {
